@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "Travel Plan Japan",
+  "schemaVersion": 1,
+  "description": "参加者の旅行予定を共有できるリアルタイム旅行計画ページ。朝・昼・夜で区分された日程表、参加者管理、おすすめスポット機能を搭載。"
+}
+</script>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅行計画</title>
+    <style>
+        :root {
+            color-scheme: light;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .trip-info {
+            display: grid;
+            gap: 15px;
+        }
+
+        .info-group {
+            display: grid;
+            gap: 5px;
+        }
+
+        .info-group label {
+            color: #666;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .info-group input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .participant-list {
+            display: grid;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .participant-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 0.95em;
+        }
+
+        .participant-item input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .btn-delete {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .btn-delete:hover {
+            background: #ff5252;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .schedule-container {
+            overflow-x: auto;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .schedule-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .schedule-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+
+        .schedule-table td:last-child {
+            border-right: none;
+        }
+
+        .schedule-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .schedule-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .time-slot {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 100px;
+            white-space: nowrap;
+            font-size: 0.9em;
+        }
+
+        .schedule-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 60px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.9em;
+        }
+
+        .schedule-cell {
+            position: relative;
+            width: 100%;
+        }
+
+        .recommendations {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .recommendations h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .rec-item {
+            padding: 10px;
+            background: #fffbeb;
+            border-left: 3px solid #f59e0b;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .rec-item .name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .rec-item .type {
+            font-size: 0.85em;
+            color: #666;
+            margin: 3px 0;
+        }
+
+        .rec-item a {
+            color: #1971c2;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+        .rec-item a:hover {
+            text-decoration: underline;
+        }
+
+        .place-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .place-input-group input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .place-input-group button {
+            background: #51cf66;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+
+        .place-input-group button:hover {
+            background: #40c057;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .place-input-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗺️ 旅行計画</h1>
+            <p>参加者の予定をリアルタイムで共有</p>
+        </div>
+
+        <div class="content">
+            <!-- 左パネル -->
+            <div class="sidebar">
+                <div class="section">
+                    <h2>旅行情報</h2>
+                    <div class="trip-info">
+                        <div class="info-group">
+                            <label>目的地</label>
+                            <input type="text" id="destination" placeholder="例：京都" value="京都">
+                        </div>
+                        <div class="info-group">
+                            <label>開始日</label>
+                            <input type="date" id="startDate" value="2026-08-04">
+                        </div>
+                        <div class="info-group">
+                            <label>終了日</label>
+                            <input type="date" id="endDate" value="2026-08-06">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>参加者</h2>
+                    <div class="participant-list" id="participantList"></div>
+                    <div class="info-group" style="margin-top: 15px;">
+                        <input type="text" id="newParticipant" placeholder="参加者の名前">
+                        <button class="btn-primary" onclick="addParticipant()">追加</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>おすすめスポット</h2>
+                    <div class="recommendations">
+                        <div id="recommendationsList"></div>
+                        <div class="place-input-group">
+                            <input type="text" id="newPlace" placeholder="スポット名">
+                            <input type="text" id="newPlaceLink" placeholder="URL">
+                            <button onclick="addRecommendation()">追加</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右パネル：スケジュール -->
+            <div>
+                <div class="section">
+                    <h2>予定表</h2>
+                    <div class="schedule-container" id="scheduleContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // LocalStorageからデータを読み込む
+        const STORAGE_KEY = 'travelPlan';
+        let travelData = {
+            destination: '京都',
+            startDate: '2026-08-04',
+            endDate: '2026-08-06',
+            participants: ['参加者1', '参加者2'],
+            schedule: {},
+            recommendations: [
+                { name: '伏見稲荷大社', type: '神社', link: 'https://inari.jp/' },
+                { name: '清水寺', type: '寺院', link: 'https://www.kiyomizudera.or.jp/' }
+            ]
+        };
+
+        // 初期化
+        function initializeApp() {
+            loadData();
+            renderTrip();
+            renderParticipants();
+            renderSchedule();
+            renderRecommendations();
+            setupEventListeners();
+        }
+
+        // データの読み込み
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                travelData = JSON.parse(saved);
+            }
+        }
+
+        // データの保存
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(travelData));
+        }
+
+        // イベントリスナーの設定
+        function setupEventListeners() {
+            document.getElementById('destination').addEventListener('change', (e) => {
+                travelData.destination = e.target.value;
+                saveData();
+            });
+
+            document.getElementById('startDate').addEventListener('change', (e) => {
+                travelData.startDate = e.target.value;
+                renderSchedule();
+                saveData();
+            });
+
+            document.getElementById('endDate').addEventListener('change', (e) => {
+                travelData.endDate = e.target.value;
+                renderSchedule();
+                saveData();
+            });
+        }
+
+        // 旅行情報の表示
+        function renderTrip() {
+            document.getElementById('destination').value = travelData.destination;
+            document.getElementById('startDate').value = travelData.startDate;
+            document.getElementById('endDate').value = travelData.endDate;
+        }
+
+        // 参加者の表示・管理
+        function renderParticipants() {
+            const list = document.getElementById('participantList');
+            list.innerHTML = travelData.participants.map((p, i) => `
+                <div class="participant-item">
+                    <span>${p}</span>
+                    <button class="btn-delete" onclick="removeParticipant(${i})">削除</button>
+                </div>
+            `).join('');
+        }
+
+        function addParticipant() {
+            const input = document.getElementById('newParticipant');
+            if (input.value.trim()) {
+                travelData.participants.push(input.value.trim());
+                input.value = '';
+                renderParticipants();
+                renderSchedule();
+                saveData();
+            }
+        }
+
+        function removeParticipant(index) {
+            travelData.participants.splice(index, 1);
+            renderParticipants();
+            renderSchedule();
+            saveData();
+        }
+
+        // スケジュール表の生成
+        function renderSchedule() {
+            const startDate = new Date(travelData.startDate);
+            const endDate = new Date(travelData.endDate);
+            const timeslots = ['朝（7:00-11:00）', '昼（11:00-17:00）', '夜（17:00-23:00）'];
+
+            let html = '<table class="schedule-table"><thead><tr><th>日程</th><th>時間帯</th>';
+            travelData.participants.forEach(p => html += `<th>${p}</th>`);
+            html += '</tr></thead><tbody>';
+
+            let currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                const dateStr = currentDate.toISOString().split('T')[0];
+                const dayName = ['日', '月', '火', '水', '木', '金', '土'][currentDate.getDay()];
+
+                timeslots.forEach((slot, slotIdx) => {
+                    html += `<tr>`;
+                    if (slotIdx === 0) {
+                        html += `<td rowspan="3"><strong>${currentDate.getMonth() + 1}/${currentDate.getDate()} (${dayName})</strong></td>`;
+                    }
+                    html += `<td class="time-slot">${slot}</td>`;
+
+                    travelData.participants.forEach(participant => {
+                        const key = `${dateStr}_${slotIdx}_${participant}`;
+                        const plan = travelData.schedule[key] || '';
+                        html += `<td class="schedule-cell"><textarea class="schedule-input" onchange="updateSchedule('${key}', this.value)" placeholder="予定を入力">${plan}</textarea></td>`;
+                    });
+                    html += '</tr>';
+                });
+
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            html += '</tbody></table>';
+            document.getElementById('scheduleContainer').innerHTML = html;
+        }
+
+        function updateSchedule(key, value) {
+            travelData.schedule[key] = value.trim();
+            saveData();
+        }
+
+        // おすすめスポット
+        function renderRecommendations() {
+            const list = document.getElementById('recommendationsList');
+            if (travelData.recommendations.length === 0) {
+                list.innerHTML = '<p style="color: #999; font-size: 0.9em;">スポットを追加してください</p>';
+                return;
+            }
+            list.innerHTML = travelData.recommendations.map((rec, i) => `
+                <div class="rec-item">
+                    <div class="name">${rec.name}</div>
+                    <div class="type">📍 ${rec.type}</div>
+                    <a href="${rec.link}" target="_blank">詳細を見る →</a>
+                </div>
+            `).join('');
+        }
+
+        function addRecommendation() {
+            const nameInput = document.getElementById('newPlace');
+            const linkInput = document.getElementById('newPlaceLink');
+
+            if (nameInput.value.trim() && linkInput.value.trim()) {
+                travelData.recommendations.push({
+                    name: nameInput.value.trim(),
+                    type: 'スポット',
+                    link: linkInput.value.trim()
+                });
+                nameInput.value = '';
+                linkInput.value = '';
+                renderRecommendations();
+                saveData();
+            }
+        }
+
+        // アプリ起動
+        initializeApp();
+    </script>
+</body>
+</html>
