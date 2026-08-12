@@ -22,3 +22,6 @@ desktop.ini
 # 임시 파일
 .tmp-*/
 *.log
+
+# 자동 업로드 로그
+.auto-push.log
