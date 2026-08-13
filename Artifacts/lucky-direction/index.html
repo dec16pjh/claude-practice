@@ -3,7 +3,7 @@
 {
   "name": "오늘의 길한 방향",
   "schemaVersion": 1,
-  "description": "이름과 생년월일을 입력하면 나침반이 잠시 돌다가 오늘의 길한 방향(북쪽)을 알려주는 페이지."
+  "description": "이름과 생년월일을 입력하면 나침반이 잠시 돌다가 오늘의 길한 방향(남쪽, 신사역 방향)을 알려주는 페이지."
 }
 </script>
 <html lang="ko">
@@ -124,8 +124,8 @@
     font-size: 0.9em;
   }
 
-  .dir.n { top: 8px; left: 50%; transform: translateX(-50%); color: #dc2626; }
-  .dir.s { bottom: 8px; left: 50%; transform: translateX(-50%); }
+  .dir.n { top: 8px; left: 50%; transform: translateX(-50%); }
+  .dir.s { bottom: 8px; left: 50%; transform: translateX(-50%); color: #dc2626; }
   .dir.e { right: 10px; top: 50%; transform: translateY(-50%); }
   .dir.w { left: 10px; top: 50%; transform: translateY(-50%); }
 
@@ -206,6 +206,30 @@
     margin-top: 4px;
   }
 
+  .result-food {
+    color: #334155;
+    font-size: 0.95em;
+    margin-top: 16px;
+  }
+
+  .result-food strong {
+    color: #ea580c;
+  }
+
+  .clip-link {
+    display: block;
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #03c75a;
+    color: white;
+    font-size: 1em;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .clip-link:hover { background: #02b350; }
+
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -241,8 +265,10 @@
     <div class="result" id="resultView" hidden>
       <div class="result-icon">🧭</div>
       <p class="result-name" id="resultName"></p>
-      <p class="result-direction">오늘의 길한 방향은 <strong>북쪽</strong>입니다</p>
-      <p class="result-sub">(종로 · 서초 방향)</p>
+      <p class="result-direction">오늘의 길한 방향은 <strong>남쪽</strong>입니다</p>
+      <p class="result-sub">(신사역 방향)</p>
+      <p class="result-food">오늘의 운이 좋아지는 음식: <strong>닭 숯불 구이</strong></p>
+      <a class="clip-link" id="clipLink" href="https://naver.me/xjY7cwu0" target="_blank" rel="noopener noreferrer">오늘의 행운 클립 보기</a>
       <button id="retryBtn">다시 보기</button>
     </div>
   </div>
@@ -284,7 +310,7 @@
     requestAnimationFrame(() => {
       needle.style.transition = '';
       spinCount += 1;
-      const targetRotation = spinCount * 1800; // 5 full spins, always ends pointing north (0deg)
+      const targetRotation = spinCount * 1800 + 180; // 5 full spins, always ends pointing south (180deg)
       needle.style.transform = `rotate(${targetRotation}deg)`;
     });
 
