@@ -379,10 +379,38 @@ function setupCustomForm() {
   });
 }
 
+function scrollToCard(id) {
+  const card = document.querySelector(`.card[data-id="${id}"]`);
+  if (!card) return;
+  card.scrollIntoView({ behavior: "smooth", block: "start" });
+  card.classList.add("card-highlight");
+  setTimeout(() => card.classList.remove("card-highlight"), 1600);
+}
+
+function initMap() {
+  const mapEl = document.getElementById("map");
+  if (!mapEl || typeof L === "undefined") return;
+
+  const located = RESTAURANTS.filter((r) => typeof r.lat === "number" && typeof r.lng === "number");
+  if (!located.length) return;
+
+  const map = L.map("map", { scrollWheelZoom: false }).setView([located[0].lat, located[0].lng], 17);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
+  }).addTo(map);
+
+  located.forEach((r) => {
+    const marker = L.marker([r.lat, r.lng]).addTo(map).bindPopup(r.name);
+    marker.on("click", () => scrollToCard(r.id));
+  });
+}
+
 async function init() {
   state.customRestaurants = parseCustomHash();
   document.getElementById("submit-btn").addEventListener("click", submitVote);
   setupCustomForm();
+  initMap();
   await tick();
   setInterval(tick, POLL_INTERVAL_MS);
 }
