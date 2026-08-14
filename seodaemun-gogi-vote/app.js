@@ -1,10 +1,9 @@
-// 실시간 투표 집계: 키 없이 쓸 수 있는 공개 카운터 API (abacus.jasoncameron.dev)
+// 실시간 투표 집계: Firebase Realtime Database (읽기/쓰기 공개 규칙, 로그인 불필요)
 // 1위 선택 = +10점, 2위 선택 = +7점. 총점 = (1위 선택 수 * 10) + (2위 선택 수 * 7)
-const NAMESPACE = "sdm-gogi-vote-0817-v1";
 const POLL_INTERVAL_MS = 10000;
 const VOTED_KEY = "sdmGogiVote_voted_v1";
 
-const API_BASE = "https://abacus.jasoncameron.dev";
+const DB_BASE = "https://seodaemun-vote-default-rtdb.firebaseio.com";
 
 const state = {
   counts: {}, // { [id]: { first: n, second: n } }
@@ -14,10 +13,6 @@ const state = {
   submitting: false,
   apiOk: true
 };
-
-function counterKey(id, place) {
-  return `${id}-${place}`;
-}
 
 function allRestaurants() {
   return RESTAURANTS.concat(state.customRestaurants);
@@ -94,37 +89,36 @@ function setVotedState(firstId, secondId) {
   localStorage.setItem(VOTED_KEY, JSON.stringify({ first: firstId, second: secondId, at: Date.now() }));
 }
 
-async function fetchCount(id, place) {
-  const key = counterKey(id, place);
-  const res = await fetch(`${API_BASE}/get/${NAMESPACE}/${key}`);
-  if (!res.ok) throw new Error("count fetch failed");
-  const data = await res.json();
-  return typeof data.value === "number" ? data.value : 0;
-}
-
 async function hitCount(id, place) {
-  const key = counterKey(id, place);
-  const res = await fetch(`${API_BASE}/hit/${NAMESPACE}/${key}`);
-  if (!res.ok) throw new Error("count hit failed");
-  const data = await res.json();
-  return typeof data.value === "number" ? data.value : 0;
+  const path = `${DB_BASE}/votes/${id}/${place}.json`;
+  const readRes = await fetch(path);
+  if (!readRes.ok) throw new Error("count read failed");
+  const current = await readRes.json();
+  const next = (typeof current === "number" ? current : 0) + 1;
+  const writeRes = await fetch(path, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(next)
+  });
+  if (!writeRes.ok) throw new Error("count write failed");
+  return next;
 }
 
 async function refreshCounts() {
   const cache = loadLocalCache();
   const list = allRestaurants();
   try {
-    const results = await Promise.all(
-      list.flatMap((r) => [
-        fetchCount(r.id, "first").then((n) => [r.id, "first", n]),
-        fetchCount(r.id, "second").then((n) => [r.id, "second", n])
-      ])
-    );
+    const res = await fetch(`${DB_BASE}/votes.json`);
+    if (!res.ok) throw new Error("counts fetch failed");
+    const data = (await res.json()) || {};
     const counts = { ...state.counts };
     list.forEach((r) => {
-      if (!counts[r.id]) counts[r.id] = { first: 0, second: 0 };
+      const entry = data[r.id] || {};
+      counts[r.id] = {
+        first: typeof entry.first === "number" ? entry.first : 0,
+        second: typeof entry.second === "number" ? entry.second : 0
+      };
     });
-    results.forEach(([id, place, n]) => (counts[id][place] = n));
     state.counts = counts;
     state.apiOk = true;
     saveLocalCache(counts);
