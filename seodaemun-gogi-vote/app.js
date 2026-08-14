@@ -219,9 +219,16 @@ function render() {
   const board = document.getElementById("board");
   const ranked = rankedRestaurants();
   board.innerHTML = `
-    ${!state.apiOk ? `<p class="api-warning">⚠️ 실시간 서버와 연결이 원활하지 않아 이 기기의 마지막 집계 결과를 보여주고 있어요.</p>` : ""}
+    ${
+      !state.apiOk
+        ? `<p class="api-warning">⚠️ 실시간 서버와 연결이 원활하지 않아 이 기기의 마지막 집계 결과를 보여주고 있어요. 사내망 등 방화벽에서는 막힐 수 있어요, 모바일 데이터로도 시도해보세요.
+            <button type="button" id="retry-btn" class="retry-btn">다시 시도</button></p>`
+        : ""
+    }
     ${ranked.map((r, i) => buildCard(r, i + 1)).join("")}
   `;
+  const retryBtn = document.getElementById("retry-btn");
+  if (retryBtn) retryBtn.addEventListener("click", tick);
   attachGalleryHandlers();
   attachPickHandlers();
   updateVoteBar();
@@ -387,22 +394,57 @@ function scrollToCard(id) {
   setTimeout(() => card.classList.remove("card-highlight"), 1600);
 }
 
-function initMap() {
+// 외부 지도 API/CDN 없이 동작하는 자체 SVG 미니맵 (사내망 등에서 외부 요청이 막혀도 항상 보임)
+function buildMiniMap() {
   const mapEl = document.getElementById("map");
-  if (!mapEl || typeof L === "undefined") return;
+  if (!mapEl) return;
 
   const located = RESTAURANTS.filter((r) => typeof r.lat === "number" && typeof r.lng === "number");
   if (!located.length) return;
 
-  const map = L.map("map", { scrollWheelZoom: false }).setView([located[0].lat, located[0].lng], 17);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 19
-  }).addTo(map);
+  const xPad = [45, 255];
+  const yPad = [30, 150];
+  const lngs = located.map((r) => r.lng);
+  const lats = located.map((r) => r.lat);
+  const minLng = Math.min(...lngs);
+  const maxLng = Math.max(...lngs);
+  const minLat = Math.min(...lats);
+  const maxLat = Math.max(...lats);
+  const lngSpan = maxLng - minLng || 1;
+  const latSpan = maxLat - minLat || 1;
 
-  located.forEach((r) => {
-    const marker = L.marker([r.lat, r.lng]).addTo(map).bindPopup(r.name);
-    marker.on("click", () => scrollToCard(r.id));
+  const toX = (lng) => xPad[0] + ((lng - minLng) / lngSpan) * (xPad[1] - xPad[0]);
+  const toY = (lat) => yPad[1] - ((lat - minLat) / latSpan) * (yPad[1] - yPad[0]);
+
+  const pins = located
+    .map((r, i) => {
+      const x = located.length > 1 ? toX(r.lng) : 150;
+      const y = located.length > 1 ? toY(r.lat) : 90;
+      return `
+        <g class="pin" data-id="${r.id}" tabindex="0" role="button" aria-label="${r.name} 상세보기">
+          <circle cx="${x}" cy="${y}" r="11" class="pin-circle"></circle>
+          <text x="${x}" y="${y}" class="pin-num" text-anchor="middle" dominant-baseline="central">${i + 1}</text>
+          <text x="${x}" y="${y + 22}" class="pin-label" text-anchor="middle">${r.name.length > 8 ? r.name.slice(0, 7) + "…" : r.name}</text>
+        </g>`;
+    })
+    .join("");
+
+  mapEl.innerHTML = `
+    <svg viewBox="0 0 300 180" class="mini-map-svg" role="img" aria-label="식당 위치 약도">
+      <line x1="20" y1="90" x2="280" y2="90" class="mini-map-street" stroke-dasharray="4 5"></line>
+      <text x="150" y="14" class="mini-map-caption" text-anchor="middle">통일로9안길 · 서대문역 인근</text>
+      ${pins}
+    </svg>`;
+
+  mapEl.querySelectorAll(".pin").forEach((pin) => {
+    const go = () => scrollToCard(pin.dataset.id);
+    pin.addEventListener("click", go);
+    pin.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        go();
+      }
+    });
   });
 }
 
@@ -410,7 +452,7 @@ async function init() {
   state.customRestaurants = parseCustomHash();
   document.getElementById("submit-btn").addEventListener("click", submitVote);
   setupCustomForm();
-  initMap();
+  buildMiniMap();
   await tick();
   setInterval(tick, POLL_INTERVAL_MS);
 }
