@@ -8,6 +8,7 @@ const RESTAURANTS = [
     mapQuery: "화우 서대문역본점",
     lat: 37.5659994,
     lng: 126.9654411,
+    phone: "0507-1441-7705",
     desc: "고급스러운 분위기의 소고기구이 전문점. 갈비탕, 육회비빔밥 등 사이드 메뉴 평도 좋아 회식·모임 장소로 인기.",
     images: [
       "https://ldb-phinf.pstatic.net/20231006_292/1696557811425syeM6_JPEG/temp_file.jpg",
@@ -38,6 +39,7 @@ const RESTAURANTS = [
     mapQuery: "충정화로 서대문",
     lat: 37.5663246,
     lng: 126.9651672,
+    reservationUrl: "https://app.catchtable.co.kr/ct/shop/chungjeonghwaro",
     desc: "얇게 겹겹이 쌓아 굽는 '천겹살'로 유명한 서대문역 고깃집. 독특한 비주얼과 식감으로 다이닝코드 등에서도 소개됨.",
     images: [
       "https://d12zq4w4guyljn.cloudfront.net/20251222090331537_photo_e1f803b10cac.webp",
@@ -63,6 +65,7 @@ const RESTAURANTS = [
     mapQuery: "한옥그레이스 서대문",
     lat: 37.5660199,
     lng: 126.9651519,
+    phone: "02-312-5955",
     desc: "자개장 인테리어가 독특한 한옥 컨셉 고깃집. 저렴한 점심특선부터 숙성육, 한우까지 폭넓은 메뉴 구성.",
     images: [
       "https://d12zq4w4guyljn.cloudfront.net/750_750_20201202090523_photo1_6c01a27e92a7.jpg",
@@ -91,6 +94,7 @@ const RESTAURANTS = [
     mapQuery: "식껍 서대문역점",
     lat: 37.5662282,
     lng: 126.9652068,
+    phone: "0507-1444-1411",
     desc: "삼겹살부터 등심덧살·쫀득살·오도독살 같은 특수부위, 한우 소고기세트까지 구성이 알찬 가성비 고깃집.",
     images: [
       "https://naverbooking-phinf.pstatic.net/20240613_120/1718277091976t7Vd7_JPEG/KakaoTalk_20240613_200801795.jpg",

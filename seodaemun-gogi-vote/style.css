@@ -288,12 +288,19 @@ body {
 }
 
 .card-address {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.card-contact {
   margin: 0 0 14px;
   font-size: 13px;
   color: var(--ink-soft);
 }
 
-.card-address a {
+.card-address a,
+.card-contact a {
   color: var(--accent);
   text-decoration: none;
   font-weight: 600;

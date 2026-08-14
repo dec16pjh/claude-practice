@@ -175,6 +175,17 @@ function buildMenu(restaurant) {
     </ul>`;
 }
 
+function buildContact(restaurant) {
+  if (restaurant.custom) return "";
+  if (restaurant.phone) {
+    return `<p class="card-contact">📞 <a href="tel:${restaurant.phone}">${restaurant.phone}</a></p>`;
+  }
+  if (restaurant.reservationUrl) {
+    return `<p class="card-contact">📞 전화번호 정보 없음 · <a href="${restaurant.reservationUrl}" target="_blank" rel="noopener">캐치테이블로 예약</a></p>`;
+  }
+  return "";
+}
+
 function buildCard(restaurant, rank) {
   const c = state.counts[restaurant.id] || { first: 0, second: 0 };
   const total = score(restaurant.id);
@@ -195,6 +206,7 @@ function buildCard(restaurant, rank) {
         <p class="card-category">${category}</p>
         <p class="card-desc">${desc}</p>
         <p class="card-address">📍 ${restaurant.custom ? restaurant.region : restaurant.address} · <a href="${mapUrl}" target="_blank" rel="noopener">네이버지도에서 보기</a></p>
+        ${buildContact(restaurant)}
         ${buildMenu(restaurant)}
         <div class="vote-stats">
           <span>🥇 1위 ${c.first}표</span>
