@@ -8,6 +8,7 @@ const API_BASE = "https://abacus.jasoncameron.dev";
 
 const state = {
   counts: {}, // { [id]: { first: n, second: n } }
+  customRestaurants: [], // [{ id, name, region, custom: true }]
   selectedFirst: null,
   selectedSecond: null,
   submitting: false,
@@ -16,6 +17,51 @@ const state = {
 
 function counterKey(id, place) {
   return `${id}-${place}`;
+}
+
+function allRestaurants() {
+  return RESTAURANTS.concat(state.customRestaurants);
+}
+
+// 짧은 결정론적 해시: 같은 이름+지역을 입력하면 항상 같은 카운터 키로 모여서 집계됨
+function hashString(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) {
+    h = (h * 33) ^ str.charCodeAt(i);
+  }
+  return (h >>> 0).toString(36);
+}
+
+function buildCustomId(name, region) {
+  const norm = `${name.trim().toLowerCase()}|${region.trim().toLowerCase()}`.replace(/\s+/g, "");
+  return `custom-${hashString(norm)}`;
+}
+
+function encodeCustomHash(list) {
+  return list.map((r) => `${encodeURIComponent(r.name)}~${encodeURIComponent(r.region)}`).join("|");
+}
+
+function parseCustomHash() {
+  const hash = location.hash.replace(/^#/, "");
+  const params = new URLSearchParams(hash);
+  const raw = params.get("custom");
+  if (!raw) return [];
+  return raw
+    .split("|")
+    .map((entry) => {
+      const [nameEnc, regionEnc] = entry.split("~");
+      if (!nameEnc || !regionEnc) return null;
+      const name = decodeURIComponent(nameEnc);
+      const region = decodeURIComponent(regionEnc);
+      return { id: buildCustomId(name, region), name, region, custom: true };
+    })
+    .filter(Boolean);
+}
+
+function syncShareUrl() {
+  const encoded = encodeCustomHash(state.customRestaurants);
+  const newHash = encoded ? `custom=${encoded}` : "";
+  history.replaceState(null, "", newHash ? `#${newHash}` : location.pathname + location.search);
 }
 
 function loadLocalCache() {
@@ -66,23 +112,28 @@ async function hitCount(id, place) {
 
 async function refreshCounts() {
   const cache = loadLocalCache();
+  const list = allRestaurants();
   try {
     const results = await Promise.all(
-      RESTAURANTS.flatMap((r) => [
+      list.flatMap((r) => [
         fetchCount(r.id, "first").then((n) => [r.id, "first", n]),
         fetchCount(r.id, "second").then((n) => [r.id, "second", n])
       ])
     );
-    const counts = {};
-    RESTAURANTS.forEach((r) => (counts[r.id] = { first: 0, second: 0 }));
+    const counts = { ...state.counts };
+    list.forEach((r) => {
+      if (!counts[r.id]) counts[r.id] = { first: 0, second: 0 };
+    });
     results.forEach(([id, place, n]) => (counts[id][place] = n));
     state.counts = counts;
     state.apiOk = true;
     saveLocalCache(counts);
   } catch (e) {
-    state.counts = Object.keys(cache).length
-      ? cache
-      : Object.fromEntries(RESTAURANTS.map((r) => [r.id, { first: 0, second: 0 }]));
+    const merged = Object.keys(cache).length ? cache : {};
+    list.forEach((r) => {
+      if (!merged[r.id]) merged[r.id] = { first: 0, second: 0 };
+    });
+    state.counts = merged;
     state.apiOk = false;
   }
 }
@@ -93,10 +144,17 @@ function score(id) {
 }
 
 function rankedRestaurants() {
-  return [...RESTAURANTS].sort((a, b) => score(b.id) - score(a.id));
+  return [...allRestaurants()].sort((a, b) => score(b.id) - score(a.id));
 }
 
 function buildGallery(restaurant) {
+  if (restaurant.custom) {
+    return `
+      <div class="gallery-placeholder">
+        <span class="placeholder-emoji">🍽️</span>
+        <span class="placeholder-label">참가자 추천 식당</span>
+      </div>`;
+  }
   const imgs = restaurant.images;
   const thumbs = imgs
     .map(
@@ -114,6 +172,9 @@ function buildGallery(restaurant) {
 }
 
 function buildMenu(restaurant) {
+  if (restaurant.custom || !restaurant.menu) {
+    return `<p class="custom-note">메뉴/사진 정보가 없어요. 추천한 분에게 물어봐주세요!</p>`;
+  }
   return `
     <ul class="menu-list">
       ${restaurant.menu.map((m) => `<li><span>${m.name}</span><span class="menu-price">${m.price}</span></li>`).join("")}
@@ -126,17 +187,20 @@ function buildCard(restaurant, rank) {
   const isLeader = rank === 1 && total > 0;
   const isFirstSel = state.selectedFirst === restaurant.id;
   const isSecondSel = state.selectedSecond === restaurant.id;
-  const mapUrl = `https://map.naver.com/p/search/${encodeURIComponent(restaurant.mapQuery)}`;
+  const mapQuery = restaurant.custom ? `${restaurant.name} ${restaurant.region}` : restaurant.mapQuery;
+  const mapUrl = `https://map.naver.com/p/search/${encodeURIComponent(mapQuery)}`;
+  const category = restaurant.custom ? `🙋 참가자 추천 · ${restaurant.region}` : restaurant.category;
+  const desc = restaurant.custom ? "다른 참가자가 직접 추천한 식당이에요." : restaurant.desc;
 
   return `
-    <article class="card ${isLeader ? "leader" : ""}" data-id="${restaurant.id}">
+    <article class="card ${isLeader ? "leader" : ""} ${restaurant.custom ? "custom-card" : ""}" data-id="${restaurant.id}">
       ${isLeader ? `<div class="leader-badge">👑 실시간 1위</div>` : `<div class="rank-badge">#${rank}</div>`}
       ${buildGallery(restaurant)}
       <div class="card-body">
         <h2 class="card-title">${restaurant.name}</h2>
-        <p class="card-category">${restaurant.category}</p>
-        <p class="card-desc">${restaurant.desc}</p>
-        <p class="card-address">📍 ${restaurant.address} · <a href="${mapUrl}" target="_blank" rel="noopener">네이버지도에서 보기</a></p>
+        <p class="card-category">${category}</p>
+        <p class="card-desc">${desc}</p>
+        <p class="card-address">📍 ${restaurant.custom ? restaurant.region : restaurant.address} · <a href="${mapUrl}" target="_blank" rel="noopener">네이버지도에서 보기</a></p>
         ${buildMenu(restaurant)}
         <div class="vote-stats">
           <span>🥇 1위 ${c.first}표</span>
@@ -166,7 +230,7 @@ function render() {
 function attachGalleryHandlers() {
   document.querySelectorAll(".gallery").forEach((gallery) => {
     const id = gallery.dataset.id;
-    const restaurant = RESTAURANTS.find((r) => r.id === id);
+    const restaurant = allRestaurants().find((r) => r.id === id);
     const mainImg = gallery.querySelector(".gallery-main-img");
     gallery.querySelectorAll(".thumb").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -198,7 +262,7 @@ function attachPickHandlers() {
 }
 
 function nameOf(id) {
-  const r = RESTAURANTS.find((r) => r.id === id);
+  const r = allRestaurants().find((r) => r.id === id);
   return r ? r.name : "";
 }
 
@@ -259,8 +323,66 @@ async function tick() {
   render();
 }
 
+function showCustomMsg(text) {
+  document.getElementById("custom-msg").textContent = text;
+}
+
+async function addCustomRestaurant(name, region) {
+  const id = buildCustomId(name, region);
+  if (allRestaurants().some((r) => r.id === id)) {
+    showCustomMsg("이미 추가된 식당이에요. 목록에서 골라주세요!");
+    return;
+  }
+  state.customRestaurants.push({ id, name: name.trim(), region: region.trim(), custom: true });
+  syncShareUrl();
+  if (!state.counts[id]) state.counts[id] = { first: 0, second: 0 };
+  render();
+  showCustomMsg("추가했어요! 아래 '링크 복사'로 단톡방에 공유해주세요 🔗");
+  await tick();
+}
+
+function setupCustomForm() {
+  document.getElementById("custom-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nameInput = document.getElementById("custom-name");
+    const regionInput = document.getElementById("custom-region");
+    const name = nameInput.value.trim();
+    const region = regionInput.value.trim();
+    if (!name || !region) {
+      showCustomMsg("식당 이름과 지역을 모두 입력해주세요.");
+      return;
+    }
+    addCustomRestaurant(name, region);
+    nameInput.value = "";
+    regionInput.value = "";
+  });
+
+  document.getElementById("copy-link-btn").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      showCustomMsg("링크를 복사했어요! 단톡방에 붙여넣기 해주세요 📋");
+    } catch (e) {
+      const ta = document.createElement("textarea");
+      ta.value = location.href;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        showCustomMsg("링크를 복사했어요! 단톡방에 붙여넣기 해주세요 📋");
+      } catch (e2) {
+        showCustomMsg(`복사에 실패했어요. 직접 복사해주세요: ${location.href}`);
+      }
+      document.body.removeChild(ta);
+    }
+  });
+}
+
 async function init() {
+  state.customRestaurants = parseCustomHash();
   document.getElementById("submit-btn").addEventListener("click", submitVote);
+  setupCustomForm();
   await tick();
   setInterval(tick, POLL_INTERVAL_MS);
 }

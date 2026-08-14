@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>서대문 고기 회식 투표 🥩</title>
+<title>8월 17일 (월) 어디서 저녁을 드실까요?</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="hero">
   <p class="eyebrow">서대문역 근처 고기집 회식 장소 투표</p>
-  <h1>어디서 고기 먹을까? 🔥</h1>
+  <h1>8월 17일 (월) 어디서 저녁을 드실까요?</h1>
   <div class="event-info">
-    <span>📅 8/17(월) 저녁 5시~</span>
+    <span>🕔 저녁 5시~</span>
     <span>📍 서대문역 인근</span>
   </div>
   <p class="how-to">
@@ -24,6 +24,21 @@
 <main id="board" class="board">
   <p class="loading">투표 현황을 불러오는 중...</p>
 </main>
+
+<section class="add-custom">
+  <h2>+ 기타 추천 식당</h2>
+  <p class="add-custom-desc">
+    목록에 없는 식당을 추천하고 싶다면 이름과 지역을 입력해 옵션에 추가하세요.
+    추가한 뒤 <strong>링크 복사</strong>로 단톡방에 다시 공유해야 다른 사람 화면에도 보여요(서버 없이 동작해서 링크에 정보를 담아 전달합니다).
+  </p>
+  <form id="custom-form" class="custom-form">
+    <input type="text" id="custom-name" placeholder="식당 이름" maxlength="40" required>
+    <input type="text" id="custom-region" placeholder="지역 (예: 서대문역)" maxlength="20" required>
+    <button type="submit">옵션에 추가</button>
+  </form>
+  <button type="button" id="copy-link-btn" class="copy-link-btn">🔗 이 링크 복사해서 단톡방에 공유하기</button>
+  <p id="custom-msg" class="custom-msg"></p>
+</section>
 
 <div id="vote-bar" class="vote-bar">
   <div class="vote-bar-inner">
