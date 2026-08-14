@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>서대문 고기 회식 투표 🥩</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <p class="eyebrow">서대문역 근처 고기집 회식 장소 투표</p>
+  <h1>어디서 고기 먹을까? 🔥</h1>
+  <div class="event-info">
+    <span>📅 8/17(월) 저녁 5시~</span>
+    <span>📍 서대문역 인근</span>
+  </div>
+  <p class="how-to">
+    각 식당 카드에서 <strong class="c-gold">🥇 1위(+10점)</strong>와 <strong class="c-silver">🥈 2위(+7점)</strong>를 하나씩 골라
+    아래 <strong>투표 제출하기</strong> 버튼을 눌러주세요. 1인 1투표, 실시간으로 순위가 반영됩니다.
+  </p>
+</header>
+
+<main id="board" class="board">
+  <p class="loading">투표 현황을 불러오는 중...</p>
+</main>
+
+<div id="vote-bar" class="vote-bar">
+  <div class="vote-bar-inner">
+    <div class="vote-bar-choices">
+      <div class="choice-slot" id="slot-first">
+        <span class="slot-label">🥇 1위</span>
+        <span class="slot-value" id="slot-first-value">미선택</span>
+      </div>
+      <div class="choice-slot" id="slot-second">
+        <span class="slot-label">🥈 2위</span>
+        <span class="slot-value" id="slot-second-value">미선택</span>
+      </div>
+    </div>
+    <button id="submit-btn" class="submit-btn" disabled>투표 제출하기</button>
+  </div>
+  <p id="vote-msg" class="vote-msg"></p>
+</div>
+
+<footer class="footer">
+  <p>메뉴/가격/영업정보는 네이버 지도·플레이스 및 실제 방문 후기를 참고해 정리했으며, 매장 사정에 따라 변경될 수 있어요. 방문 전 최신 정보를 다시 확인해주세요.</p>
+  <p>투표는 별도 로그인 없이 공개 실시간 카운터로 집계됩니다. 브라우저(기기)당 1회만 투표할 수 있어요.</p>
+</footer>
+
+<script src="restaurants.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
