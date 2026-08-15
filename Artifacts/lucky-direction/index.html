@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<script type="application/json" id="cowork-artifact-meta">
+{
+  "name": "오늘의 길한 방향",
+  "schemaVersion": 1,
+  "description": "이름과 생년월일을 입력하면 나침반이 잠시 돌다가 오늘의 길한 방향(남쪽, 신사역 방향)을 알려주는 페이지."
+}
+</script>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오늘의 길한 방향</title>
+<style>
+  :root { color-scheme: light; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', 'Malgun Gothic', Tahoma, sans-serif;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 1.5em;
+    color: #1e293b;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    color: #64748b;
+    font-size: 0.9em;
+    margin-bottom: 24px;
+  }
+
+  .field {
+    text-align: left;
+    margin-bottom: 14px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 0.85em;
+    color: #334155;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .field input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 1em;
+    color: #1e293b;
+  }
+
+  .field input:focus {
+    outline: none;
+    border-color: #6366f1;
+  }
+
+  .error-text {
+    color: #dc2626;
+    font-size: 0.8em;
+    margin-top: 8px;
+    min-height: 1em;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #6366f1;
+    color: white;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+
+  button:hover { background: #4f46e5; }
+
+  #retryBtn {
+    background: #e2e8f0;
+    color: #334155;
+    margin-top: 20px;
+  }
+
+  #retryBtn:hover { background: #cbd5e1; }
+
+  .compass-wrap { margin-top: 8px; }
+
+  .compass {
+    width: 200px;
+    height: 200px;
+    margin: 12px auto;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, #f8fafc, #e2e8f0);
+    border: 6px solid #334155;
+    position: relative;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.15);
+  }
+
+  .dir {
+    position: absolute;
+    font-weight: 700;
+    color: #475569;
+    font-size: 0.9em;
+  }
+
+  .dir.n { top: 8px; left: 50%; transform: translateX(-50%); }
+  .dir.s { bottom: 8px; left: 50%; transform: translateX(-50%); color: #dc2626; }
+  .dir.e { right: 10px; top: 50%; transform: translateY(-50%); }
+  .dir.w { left: 10px; top: 50%; transform: translateY(-50%); }
+
+  .needle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 78px;
+    margin-left: -3px;
+    margin-top: -78px;
+    transform-origin: bottom center;
+    transition: transform 2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .needle::before,
+  .needle::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+  }
+
+  .needle::before {
+    top: 0;
+    border-bottom: 40px solid #dc2626;
+  }
+
+  .needle::after {
+    top: 40px;
+    border-top: 38px solid #94a3b8;
+  }
+
+  .compass::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: #334155;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+
+  .status {
+    color: #64748b;
+    font-size: 0.9em;
+    margin-top: 8px;
+  }
+
+  .result-icon { font-size: 2.4em; margin-bottom: 4px; }
+
+  .result-name {
+    font-size: 1.1em;
+    color: #1e293b;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .result-direction {
+    font-size: 1.15em;
+    color: #1e293b;
+  }
+
+  .result-direction strong {
+    color: #dc2626;
+    font-size: 1.3em;
+  }
+
+  .result-sub {
+    color: #64748b;
+    font-size: 0.9em;
+    margin-top: 4px;
+  }
+
+  .result-food {
+    color: #334155;
+    font-size: 0.95em;
+    margin-top: 16px;
+  }
+
+  .result-food strong {
+    color: #ea580c;
+  }
+
+  .clip-image {
+    display: block;
+    width: 100%;
+    margin-top: 16px;
+    border-radius: 8px;
+  }
+
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>오늘의 길한 방향</h1>
+    <p class="subtitle">이름과 생년월일을 입력하고 오늘의 길한 방향을 확인해 보세요</p>
+
+    <div id="formView">
+      <div class="field">
+        <label for="nameInput">이름</label>
+        <input id="nameInput" type="text" placeholder="이름을 입력하세요">
+      </div>
+      <div class="field">
+        <label for="birthInput">생년월일</label>
+        <input id="birthInput" type="date">
+      </div>
+      <button id="askBtn">오늘의 길한 방향 보기</button>
+      <p class="error-text" id="errorText"></p>
+    </div>
+
+    <div class="compass-wrap" id="compassWrap" hidden>
+      <div class="compass">
+        <span class="dir n">N</span>
+        <span class="dir e">E</span>
+        <span class="dir s">S</span>
+        <span class="dir w">W</span>
+        <div class="needle" id="needle"></div>
+      </div>
+      <p class="status" id="statusText">오늘의 길한 방향을 찾는 중...</p>
+    </div>
+
+    <div class="result" id="resultView" hidden>
+      <div class="result-icon">🧭</div>
+      <p class="result-name" id="resultName"></p>
+      <p class="result-direction">오늘의 길한 방향은 <strong>남쪽</strong>입니다</p>
+      <p class="result-sub">(신사역 방향)</p>
+      <p class="result-food">오늘의 운이 좋아지는 음식: <strong>닭 숯불 구이</strong></p>
+      <img class="clip-image" src="assets/lucky-food.jpg" alt="닭 숯불 구이">
+      <button id="retryBtn">다시 보기</button>
+    </div>
+  </div>
+
+<script>
+  const formView = document.getElementById('formView');
+  const compassWrap = document.getElementById('compassWrap');
+  const resultView = document.getElementById('resultView');
+  const nameInput = document.getElementById('nameInput');
+  const birthInput = document.getElementById('birthInput');
+  const askBtn = document.getElementById('askBtn');
+  const retryBtn = document.getElementById('retryBtn');
+  const errorText = document.getElementById('errorText');
+  const needle = document.getElementById('needle');
+  const resultName = document.getElementById('resultName');
+
+  let spinCount = 0;
+
+  askBtn.addEventListener('click', () => {
+    const name = nameInput.value.trim();
+    const birth = birthInput.value;
+
+    if (!name || !birth) {
+      errorText.textContent = '이름과 생년월일을 모두 입력해 주세요.';
+      return;
+    }
+    errorText.textContent = '';
+
+    formView.hidden = true;
+    resultView.hidden = true;
+    compassWrap.hidden = false;
+
+    // Reset the needle instantly (no transition) before unhiding takes effect,
+    // otherwise the browser skips the transition since both changes land in one frame.
+    needle.style.transition = 'none';
+    needle.style.transform = 'rotate(0deg)';
+    needle.offsetHeight; // force reflow
+
+    requestAnimationFrame(() => {
+      needle.style.transition = '';
+      spinCount += 1;
+      const targetRotation = spinCount * 1800 + 180; // 5 full spins, always ends pointing south (180deg)
+      needle.style.transform = `rotate(${targetRotation}deg)`;
+    });
+
+    setTimeout(() => {
+      compassWrap.hidden = true;
+      resultName.textContent = `${name}님,`;
+      resultView.hidden = false;
+    }, 2000);
+  });
+
+  retryBtn.addEventListener('click', () => {
+    resultView.hidden = true;
+    formView.hidden = false;
+  });
+</script>
+</body>
+</html>
