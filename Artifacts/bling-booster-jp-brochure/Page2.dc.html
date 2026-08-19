@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;600&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #E20074;
+      --pink-deep: #B8005E;
+      --pink-soft: #FDEDF4;
+      --pink-mid: #F8C6DC;
+      --cream: #FFFBF8;
+      --ink: #2B1420;
+      --ink-soft: #6E4A57;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif; }
+    a { color: var(--pink-deep); }
+    a:hover { color: var(--pink); }
+    .mincho { font-family: "Zen Old Mincho", "Hiragino Mincho ProN", serif; }
+  </style>
+</helmet>
+
+<div style="width:794px; height:1123px; background:var(--cream); position:relative; overflow:hidden; display:flex; flex-direction:column;">
+
+  <!-- Header -->
+  <div style="flex-shrink:0; padding:34px 44px 18px 44px; display:flex; flex-direction:column; gap:4px; border-bottom:1px solid var(--pink-mid);">
+    <span style="font-size:12px; letter-spacing:0.18em; font-weight:700; color:var(--pink-deep);">PRODUCT LINE-UP</span>
+    <span class="mincho" style="font-size:24px; font-weight:600; color:var(--ink);">製品ラインナップ</span>
+  </div>
+
+  <!-- Products -->
+  <div style="flex:1; padding:22px 44px 0 44px; display:flex; flex-direction:column; gap:16px;">
+
+    <!-- Collagen -->
+    <div style="display:flex; gap:20px; align-items:center; background:var(--pink-soft); border-radius:4px; padding:16px; height:172px;">
+      <img src="bb_collagen_opt.jpg" alt="Bling Booster Collagen" style="width:150px; height:150px; object-fit:cover; border-radius:3px; flex-shrink:0;">
+      <div style="display:flex; flex-direction:column; gap:6px; min-width:0;">
+        <div style="display:flex; align-items:baseline; gap:8px;">
+          <span style="font-size:17px; font-weight:700; color:var(--ink);">ブリング ブースター コラーゲン</span>
+          <span style="font-size:11px; font-weight:700; color:#fff; background:var(--pink); padding:2px 8px; border-radius:20px;">COLLAGEN 1200mg</span>
+        </div>
+        <p style="margin:0; font-size:14px; line-height:1.75; color:var(--ink-soft);">
+          わずか300ダルトンの超低分子フィッシュコラーゲンでスピーディーに吸収。お肌に嬉しいビタミンB3配合、爽やかで甘みのあるザクロ果汁で美味しく続けられる、1本20kcalの低カロリー設計。
+        </p>
+        <span style="font-size:12px; color:var(--pink-deep); font-weight:600;">2024ブリュッセルITQI優秀味覚賞 ・ 2024ソウルアワード優秀賞</span>
+      </div>
+    </div>
+
+    <!-- Floral Fizz -->
+    <div style="display:flex; gap:20px; align-items:center; background:var(--pink-soft); border-radius:4px; padding:16px; height:172px;">
+      <img src="floral_fizz_opt.jpg" alt="Floral Fizz" style="width:150px; height:150px; object-fit:cover; border-radius:3px; flex-shrink:0;">
+      <div style="display:flex; flex-direction:column; gap:6px; min-width:0;">
+        <div style="display:flex; align-items:baseline; gap:8px;">
+          <span style="font-size:17px; font-weight:700; color:var(--ink);">フローラルフィズ</span>
+          <span style="font-size:11px; font-weight:700; color:#fff; background:var(--pink); padding:2px 8px; border-radius:20px;">0kcal</span>
+        </div>
+        <p style="margin:0; font-size:14px; line-height:1.75; color:var(--ink-soft);">
+          本物の花とハーブのエキスを使用した、これまでにないゼロカロリー炭酸飲料。甘いカモミールと爽やかなミントの「カモミント」、芳醇なハイビスカスと生姜の「ハイビスカスジンジャー」の2種展開。
+        </p>
+        <span style="font-size:12px; color:var(--pink-deep); font-weight:600;">2024ソウルアワード優秀賞受賞</span>
+      </div>
+    </div>
+
+    <!-- Yogurt Sparkling -->
+    <div style="display:flex; gap:20px; align-items:center; background:var(--pink-soft); border-radius:4px; padding:16px; height:172px;">
+      <img src="yogurt_sparkling_opt.jpg" alt="Yogurt Sparkling" style="width:150px; height:150px; object-fit:cover; border-radius:3px; flex-shrink:0; object-position:top;">
+      <div style="display:flex; flex-direction:column; gap:6px; min-width:0;">
+        <div style="display:flex; align-items:baseline; gap:8px;">
+          <span style="font-size:17px; font-weight:700; color:var(--ink);">ヨーグルトスパークリング</span>
+          <span style="font-size:11px; font-weight:700; color:#fff; background:var(--pink); padding:2px 8px; border-radius:20px;">80億 Postbiotics</span>
+        </div>
+        <p style="margin:0; font-size:14px; line-height:1.75; color:var(--ink-soft);">
+          80億個のポストバイオティクスを配合した新発想の炭酸ヨーグルト飲料。無脂肪(0%)で軽やかな飲み心地、オランダ産プレミアム脱脂粉乳を使用。オリジナル/ピーチ/シャインマスカットの3種類。
+        </p>
+        <span style="font-size:12px; color:var(--pink-deep); font-weight:600;">HALAL認証取得 ・ 2024ソウルアワード選定</span>
+      </div>
+    </div>
+
+    <!-- How to enjoy -->
+    <div style="display:flex; align-items:center; gap:14px; padding:14px 18px; border:1px solid var(--pink-mid); border-radius:4px;">
+      <span style="font-size:12px; letter-spacing:0.14em; font-weight:700; color:var(--pink-deep); flex-shrink:0;">HOW TO ENJOY</span>
+      <span style="font-size:14px; line-height:1.7; color:var(--ink);">よく冷やしてそのままお楽しみください。忙しい毎日のリフレッシュに、一本どうぞ。</span>
+    </div>
+  </div>
+
+  <!-- Footer / Contact -->
+  <div style="flex-shrink:0; margin-top:20px; background:var(--pink-deep); padding:22px 44px; display:flex; flex-direction:column; gap:10px;">
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <span class="mincho" style="color:#fff; font-size:16px; font-weight:600;">Bling Booster</span>
+      <span style="color:#FBD9E7; font-size:12px;">@blingbooster_official</span>
+    </div>
+    <div style="height:1px; background:rgba(255,255,255,0.25);"></div>
+    <div style="display:flex; flex-wrap:wrap; gap:6px 22px; font-size:12.5px; color:#FBD9E7; line-height:1.7;">
+      <span>TIUM GLOBAL CO., LTD.</span>
+      <span>10F Haeyoung BD, Yulgok-ro 53, Jongno, Seoul, Korea</span>
+      <span>TEL +82 2 723 1003</span>
+      <span>info@blingbooster.com</span>
+      <span style="color:#fff; font-weight:600;">www.BlingBooster.com</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

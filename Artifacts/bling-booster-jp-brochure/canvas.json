@@ -1,0 +1,7 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 794, "h": 1123, "title": "1ページ目 - ブランド紹介", "print": "fixed" },
+    { "file": "Page2.dc.html", "x": 854, "y": 0, "w": 794, "h": 1123, "title": "2ページ目 - 製品ラインナップ", "print": "fixed" }
+  ],
+  "launch": { "view": "canvas" }
+}
