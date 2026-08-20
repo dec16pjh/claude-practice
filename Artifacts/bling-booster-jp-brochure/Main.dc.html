@@ -26,9 +26,9 @@
     a:hover { color: var(--pink); }
     .mincho { font-family: "Zen Old Mincho", "Hiragino Mincho ProN", serif; }
     .card { display:flex; flex-direction:column; background:var(--pink-soft); border-radius:4px; overflow:hidden; }
-    .card-img-wrap { width:100%; height:255px; flex-shrink:0; background:#fff; display:flex; align-items:center; justify-content:center; }
-    .card-img { max-width:100%; max-height:100%; object-fit:contain; display:block; }
-    .card-body { flex:1; padding:9px 13px 11px 13px; display:flex; flex-direction:column; gap:4px; }
+    .card-img-wrap { width:100%; aspect-ratio: 4/3; flex-shrink:0; background:#fff; display:block; overflow:hidden; }
+    .card-img { width:100%; height:100%; object-fit:cover; display:block; }
+    .card-body { flex:1; padding:6px 12px 6px 12px; display:flex; flex-direction:column; gap:3px; }
     .card-title-row { display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
     .card-title { font-size:16px; font-weight:700; color:var(--ink); }
     .card-tag { font-size:10px; font-weight:700; color:#fff; background:var(--pink); padding:2px 7px; border-radius:20px; white-space:nowrap; }
@@ -39,28 +39,25 @@
 
 <div style="width:794px; height:1123px; background:var(--cream); position:relative; overflow:hidden; display:flex; flex-direction:column;">
 
-  <!-- Hero photo (original product image, unedited) - compact full-bleed banner -->
-  <div style="width:100%; height:150px; flex-shrink:0; position:relative;">
-    <img src="bb_front_opt.jpg" alt="Bling Booster product lineup" style="width:100%; height:100%; display:block; object-fit:cover; object-position:center top;">
+  <!-- Hero photo (original product image, unedited) - brand-forward banner, logo clearly visible -->
+  <div style="width:100%; height:200px; flex-shrink:0; position:relative;">
+    <img src="hero_brand_opt.jpg" alt="Bling Booster brand logo and product" style="width:100%; height:100%; display:block; object-fit:cover; object-position:center top;">
   </div>
 
   <!-- Brand strip -->
-  <div style="flex-shrink:0; padding:10px 36px 8px 36px; display:flex; align-items:baseline; justify-content:space-between; border-bottom:1px solid var(--pink-mid);">
-    <div style="display:flex; align-items:baseline; gap:8px;">
-      <span class="mincho" style="font-size:19px; font-weight:600; color:var(--pink-deep);">Bling Booster</span>
-      <span style="font-size:11.5px; color:var(--ink-soft);">「健康的で美味しい」を届けるK-インナービューティー</span>
-    </div>
+  <div style="flex-shrink:0; padding:6px 36px 5px 36px; display:flex; align-items:baseline; justify-content:space-between; border-bottom:1px solid var(--pink-mid);">
+    <span style="font-size:11.5px; color:var(--ink-soft);">「健康的で美味しい」を届けるK-インナービューティー</span>
     <span style="font-size:10.5px; letter-spacing:0.14em; font-weight:700; color:var(--pink-deep);">PRODUCT LINE-UP</span>
   </div>
 
   <!-- Products grid -->
-  <div style="flex:1; padding:12px 36px 0 36px; display:flex; flex-direction:column;">
+  <div style="flex:1; padding:8px 36px 0 36px; display:flex; flex-direction:column;">
 
-    <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px; height:100%;">
+    <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:6px; height:100%;">
 
       <!-- Collagen -->
       <div class="card">
-        <div class="card-img-wrap"><img src="bb_collagen_opt.jpg" alt="Bling Booster Collagen" class="card-img"></div>
+        <div class="card-img-wrap"><img src="collagen_unified.jpg" alt="Bling Booster Collagen" class="card-img"></div>
         <div class="card-body">
           <div class="card-title-row">
             <span class="card-title">コラーゲン</span>
@@ -73,7 +70,7 @@
 
       <!-- Floral Fizz -->
       <div class="card">
-        <div class="card-img-wrap"><img src="floral_fizz_opt.jpg" alt="Floral Fizz" class="card-img"></div>
+        <div class="card-img-wrap"><img src="floral_unified.jpg" alt="Floral Fizz" class="card-img"></div>
         <div class="card-body">
           <div class="card-title-row">
             <span class="card-title">フローラルフィズ</span>
@@ -86,7 +83,7 @@
 
       <!-- Yogurt Sparkling -->
       <div class="card">
-        <div class="card-img-wrap"><img src="yogurt_sparkling_opt.jpg" alt="Yogurt Sparkling" class="card-img"></div>
+        <div class="card-img-wrap"><img src="yogurt_unified.jpg" alt="Yogurt Sparkling" class="card-img"></div>
         <div class="card-body">
           <div class="card-title-row">
             <span class="card-title">ヨーグルトスパークリング</span>
@@ -99,7 +96,7 @@
 
       <!-- Inner Beauty Powder Tea -->
       <div class="card">
-        <div class="card-img-wrap"><img src="powder_series_opt.jpg" alt="Bling Booster Inner Beauty Series powder sticks" class="card-img"></div>
+        <div class="card-img-wrap"><img src="powder_unified.jpg" alt="Bling Booster Inner Beauty Series powder sticks" class="card-img"></div>
         <div class="card-body">
           <div class="card-title-row">
             <span class="card-title">インナービューティー パウダーティー</span>
@@ -114,7 +111,7 @@
   </div>
 
   <!-- Footer / Contact -->
-  <div style="flex-shrink:0; margin-top:12px; background:var(--pink-deep); padding:12px 36px; display:flex; flex-direction:column; gap:5px;">
+  <div style="flex-shrink:0; margin-top:7px; background:var(--pink-deep); padding:7px 36px; display:flex; flex-direction:column; gap:3px;">
     <div style="display:flex; align-items:center; justify-content:space-between;">
       <span class="mincho" style="color:#fff; font-size:15px; font-weight:600;">Bling Booster</span>
       <span style="color:#FBD9E7; font-size:11px;">@blingbooster_official</span>
