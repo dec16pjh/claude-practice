@@ -26,8 +26,8 @@
     a:hover { color: var(--pink); }
     .mincho { font-family: "Zen Old Mincho", "Hiragino Mincho ProN", serif; }
     .card { display:flex; flex-direction:column; background:var(--pink-soft); border-radius:4px; overflow:hidden; }
-    .card-img { width:100%; height:132px; object-fit:cover; display:block; flex-shrink:0; }
-    .card-body { flex:1; padding:14px 16px 16px 16px; display:flex; flex-direction:column; gap:6px; }
+    .card-img { width:100%; height:220px; object-fit:cover; display:block; flex-shrink:0; }
+    .card-body { flex:1; padding:10px 14px 12px 14px; display:flex; flex-direction:column; gap:5px; }
     .card-title-row { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
     .card-title { font-size:16.5px; font-weight:700; color:var(--ink); }
     .card-tag { font-size:10.5px; font-weight:700; color:#fff; background:var(--pink); padding:2px 7px; border-radius:20px; white-space:nowrap; }
@@ -39,15 +39,15 @@
 <div style="width:794px; height:1123px; background:var(--cream); position:relative; overflow:hidden; display:flex; flex-direction:column;">
 
   <!-- Header -->
-  <div style="flex-shrink:0; padding:28px 44px 14px 44px; display:flex; flex-direction:column; gap:4px; border-bottom:1px solid var(--pink-mid);">
+  <div style="flex-shrink:0; padding:22px 36px 10px 36px; display:flex; flex-direction:column; gap:3px; border-bottom:1px solid var(--pink-mid);">
     <span style="font-size:12px; letter-spacing:0.18em; font-weight:700; color:var(--pink-deep);">PRODUCT LINE-UP</span>
-    <span class="mincho" style="font-size:23px; font-weight:600; color:var(--ink);">製品ラインナップ</span>
+    <span class="mincho" style="font-size:22px; font-weight:600; color:var(--ink);">製品ラインナップ</span>
   </div>
 
   <!-- Products grid -->
-  <div style="flex:1; padding:18px 44px 0 44px; display:flex; flex-direction:column; gap:14px;">
+  <div style="flex:1; padding:14px 36px 0 36px; display:flex; flex-direction:column; gap:10px;">
 
-    <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px;">
+    <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:12px;">
 
       <!-- Collagen -->
       <div class="card">
@@ -77,7 +77,7 @@
 
       <!-- Yogurt Sparkling -->
       <div class="card">
-        <img src="yogurt_sparkling_opt.jpg" alt="Yogurt Sparkling" class="card-img" style="object-position:center 35%;">
+        <img src="yogurt_sparkling_opt.jpg" alt="Yogurt Sparkling" class="card-img" style="object-position:center 30%;">
         <div class="card-body">
           <div class="card-title-row">
             <span class="card-title">ヨーグルトスパークリング</span>
@@ -104,16 +104,16 @@
     </div>
 
     <!-- How to enjoy -->
-    <div style="display:flex; gap:14px; padding:13px 18px; border:1px solid var(--pink-mid); border-radius:4px; align-items:center;">
+    <div style="display:flex; gap:12px; padding:10px 16px; border:1px solid var(--pink-mid); border-radius:4px; align-items:center;">
       <span style="font-size:11.5px; letter-spacing:0.13em; font-weight:700; color:var(--pink-deep); flex-shrink:0;">HOW TO<br>ENJOY</span>
       <div style="width:1px; align-self:stretch; background:var(--pink-mid);"></div>
-      <span style="font-size:14px; line-height:1.6; color:var(--ink); flex:1;"><strong style="color:var(--pink-deep);">ドリンク:</strong> よく冷やしてそのままお楽しみください。</span>
-      <span style="font-size:14px; line-height:1.6; color:var(--ink); flex:1;"><strong style="color:var(--pink-deep);">パウダーティー:</strong> 1日1〜2本を水・牛乳・ヨーグルトに混ぜて。</span>
+      <span style="font-size:14px; line-height:1.5; color:var(--ink); flex:1;"><strong style="color:var(--pink-deep);">ドリンク:</strong> よく冷やしてそのままお楽しみください。</span>
+      <span style="font-size:14px; line-height:1.5; color:var(--ink); flex:1;"><strong style="color:var(--pink-deep);">パウダーティー:</strong> 1日1〜2本を水・牛乳・ヨーグルトに混ぜて。</span>
     </div>
   </div>
 
   <!-- Footer / Contact -->
-  <div style="flex-shrink:0; margin-top:16px; background:var(--pink-deep); padding:18px 44px; display:flex; flex-direction:column; gap:9px;">
+  <div style="flex-shrink:0; margin-top:12px; background:var(--pink-deep); padding:14px 36px; display:flex; flex-direction:column; gap:7px;">
     <div style="display:flex; align-items:center; justify-content:space-between;">
       <span class="mincho" style="color:#fff; font-size:16px; font-weight:600;">Bling Booster</span>
       <span style="color:#FBD9E7; font-size:12px;">@blingbooster_official</span>
