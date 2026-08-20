@@ -25,74 +25,95 @@
     a { color: var(--pink-deep); }
     a:hover { color: var(--pink); }
     .mincho { font-family: "Zen Old Mincho", "Hiragino Mincho ProN", serif; }
+    .card { display:flex; flex-direction:column; background:var(--pink-soft); border-radius:4px; overflow:hidden; }
+    .card-img { width:100%; height:132px; object-fit:cover; display:block; flex-shrink:0; }
+    .card-body { flex:1; padding:14px 16px 16px 16px; display:flex; flex-direction:column; gap:6px; }
+    .card-title-row { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
+    .card-title { font-size:16.5px; font-weight:700; color:var(--ink); }
+    .card-tag { font-size:10.5px; font-weight:700; color:#fff; background:var(--pink); padding:2px 7px; border-radius:20px; white-space:nowrap; }
+    .card-desc { margin:0; font-size:14px; line-height:1.55; color:var(--ink-soft); flex:1; }
+    .card-cert { font-size:11.5px; color:var(--pink-deep); font-weight:600; }
   </style>
 </helmet>
 
 <div style="width:794px; height:1123px; background:var(--cream); position:relative; overflow:hidden; display:flex; flex-direction:column;">
 
   <!-- Header -->
-  <div style="flex-shrink:0; padding:34px 44px 18px 44px; display:flex; flex-direction:column; gap:4px; border-bottom:1px solid var(--pink-mid);">
+  <div style="flex-shrink:0; padding:28px 44px 14px 44px; display:flex; flex-direction:column; gap:4px; border-bottom:1px solid var(--pink-mid);">
     <span style="font-size:12px; letter-spacing:0.18em; font-weight:700; color:var(--pink-deep);">PRODUCT LINE-UP</span>
-    <span class="mincho" style="font-size:24px; font-weight:600; color:var(--ink);">製品ラインナップ</span>
+    <span class="mincho" style="font-size:23px; font-weight:600; color:var(--ink);">製品ラインナップ</span>
   </div>
 
-  <!-- Products -->
-  <div style="flex:1; padding:22px 44px 0 44px; display:flex; flex-direction:column; gap:16px;">
+  <!-- Products grid -->
+  <div style="flex:1; padding:18px 44px 0 44px; display:flex; flex-direction:column; gap:14px;">
 
-    <!-- Collagen -->
-    <div style="display:flex; gap:20px; align-items:center; background:var(--pink-soft); border-radius:4px; padding:18px; height:190px;">
-      <img src="bb_collagen_opt.jpg" alt="Bling Booster Collagen" style="width:150px; height:150px; object-fit:cover; border-radius:3px; flex-shrink:0;">
-      <div style="display:flex; flex-direction:column; gap:8px; min-width:0;">
-        <div style="display:flex; align-items:baseline; gap:8px;">
-          <span style="font-size:18px; font-weight:700; color:var(--ink);">ブリング ブースター コラーゲン</span>
-          <span style="font-size:12px; font-weight:700; color:#fff; background:var(--pink); padding:2px 8px; border-radius:20px;">COLLAGEN 1200mg</span>
-        </div>
-        <p style="margin:0; font-size:16px; line-height:1.6; color:var(--ink-soft);">
-          わずか300ダルトンの超低分子フィッシュコラーゲンでスピーディーに吸収。お肌に嬉しいビタミンB3配合、爽やかで甘みのあるザクロ果汁で美味しく続けられる、1本20kcalの低カロリー設計。
-        </p>
-        <span style="font-size:13px; color:var(--pink-deep); font-weight:600;">2024ブリュッセルITQI優秀味覚賞 ・ 2024ソウルアワード優秀賞</span>
-      </div>
-    </div>
+    <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:14px;">
 
-    <!-- Floral Fizz -->
-    <div style="display:flex; gap:20px; align-items:center; background:var(--pink-soft); border-radius:4px; padding:18px; height:190px;">
-      <img src="floral_fizz_opt.jpg" alt="Floral Fizz" style="width:150px; height:150px; object-fit:cover; border-radius:3px; flex-shrink:0;">
-      <div style="display:flex; flex-direction:column; gap:8px; min-width:0;">
-        <div style="display:flex; align-items:baseline; gap:8px;">
-          <span style="font-size:18px; font-weight:700; color:var(--ink);">フローラルフィズ</span>
-          <span style="font-size:12px; font-weight:700; color:#fff; background:var(--pink); padding:2px 8px; border-radius:20px;">0kcal</span>
+      <!-- Collagen -->
+      <div class="card">
+        <img src="bb_collagen_opt.jpg" alt="Bling Booster Collagen" class="card-img" style="object-position:center;">
+        <div class="card-body">
+          <div class="card-title-row">
+            <span class="card-title">コラーゲン</span>
+            <span class="card-tag">COLLAGEN 1200mg</span>
+          </div>
+          <p class="card-desc">わずか300ダルトンの超低分子フィッシュコラーゲンでスピーディーに吸収。ビタミンB3配合、爽やかなザクロ果汁で1本20kcalの低カロリー設計。</p>
+          <span class="card-cert">2024ブリュッセルITQI優秀味覚賞 ・ 2024ソウルアワード優秀賞</span>
         </div>
-        <p style="margin:0; font-size:16px; line-height:1.6; color:var(--ink-soft);">
-          本物の花とハーブのエキスを使用した、これまでにないゼロカロリー炭酸飲料。甘いカモミールと爽やかなミントの「カモミント」、芳醇なハイビスカスと生姜の「ハイビスカスジンジャー」の2種展開。
-        </p>
-        <span style="font-size:13px; color:var(--pink-deep); font-weight:600;">2024ソウルアワード優秀賞受賞</span>
       </div>
-    </div>
 
-    <!-- Yogurt Sparkling -->
-    <div style="display:flex; gap:20px; align-items:center; background:var(--pink-soft); border-radius:4px; padding:18px; height:190px;">
-      <img src="yogurt_sparkling_opt.jpg" alt="Yogurt Sparkling" style="width:150px; height:150px; object-fit:cover; border-radius:3px; flex-shrink:0; object-position:top;">
-      <div style="display:flex; flex-direction:column; gap:8px; min-width:0;">
-        <div style="display:flex; align-items:baseline; gap:8px;">
-          <span style="font-size:18px; font-weight:700; color:var(--ink);">ヨーグルトスパークリング</span>
-          <span style="font-size:12px; font-weight:700; color:#fff; background:var(--pink); padding:2px 8px; border-radius:20px;">80億 Postbiotics</span>
+      <!-- Floral Fizz -->
+      <div class="card">
+        <img src="floral_fizz_opt.jpg" alt="Floral Fizz" class="card-img" style="object-position:center;">
+        <div class="card-body">
+          <div class="card-title-row">
+            <span class="card-title">フローラルフィズ</span>
+            <span class="card-tag">0kcal</span>
+          </div>
+          <p class="card-desc">本物の花とハーブのエキスを使用したゼロカロリー炭酸飲料。甘いカモミールとミントの「カモミント」、芳醇なハイビスカスと生姜の「ハイビスカスジンジャー」。</p>
+          <span class="card-cert">2024ソウルアワード優秀賞受賞</span>
         </div>
-        <p style="margin:0; font-size:16px; line-height:1.6; color:var(--ink-soft);">
-          80億個のポストバイオティクスを配合した新発想の炭酸ヨーグルト飲料。無脂肪(0%)で軽やかな飲み心地、オランダ産プレミアム脱脂粉乳を使用。オリジナル/ピーチ/シャインマスカットの3種類。
-        </p>
-        <span style="font-size:13px; color:var(--pink-deep); font-weight:600;">HALAL認証取得 ・ 2024ソウルアワード選定</span>
       </div>
+
+      <!-- Yogurt Sparkling -->
+      <div class="card">
+        <img src="yogurt_sparkling_opt.jpg" alt="Yogurt Sparkling" class="card-img" style="object-position:center 35%;">
+        <div class="card-body">
+          <div class="card-title-row">
+            <span class="card-title">ヨーグルトスパークリング</span>
+            <span class="card-tag">80億 Postbiotics</span>
+          </div>
+          <p class="card-desc">80億個のポストバイオティクスを配合した炭酸ヨーグルト飲料。無脂肪(0%)で軽やか、オランダ産プレミアム脱脂粉乳を使用。オリジナル/ピーチ/シャインマスカット。</p>
+          <span class="card-cert">HALAL認証取得 ・ 2024ソウルアワード選定</span>
+        </div>
+      </div>
+
+      <!-- Inner Beauty Powder Tea -->
+      <div class="card">
+        <img src="powder_series_opt.jpg" alt="Bling Booster Inner Beauty Series powder sticks" class="card-img" style="object-position:center;">
+        <div class="card-body">
+          <div class="card-title-row">
+            <span class="card-title">インナービューティー パウダーティー</span>
+            <span class="card-tag">30本入り スティック</span>
+          </div>
+          <p class="card-desc">かぼちゃ&amp;小豆(V-LINE)、済州大麦若葉+ABC(CLEAN)、ザクロコラーゲン(GLOW)、酵素+ルテイン+植物性メラトニン(NIGHT)の4種。水・牛乳・ヨーグルトに混ぜて毎日のインナーケアに。</p>
+          <span class="card-cert">Daily Inner Beauty Routine ・ 4 Daily Solutions</span>
+        </div>
+      </div>
+
     </div>
 
     <!-- How to enjoy -->
-    <div style="display:flex; align-items:center; gap:14px; padding:14px 18px; border:1px solid var(--pink-mid); border-radius:4px;">
-      <span style="font-size:12px; letter-spacing:0.14em; font-weight:700; color:var(--pink-deep); flex-shrink:0;">HOW TO ENJOY</span>
-      <span style="font-size:16px; line-height:1.6; color:var(--ink);">よく冷やしてそのままお楽しみください。忙しい毎日のリフレッシュに、一本どうぞ。</span>
+    <div style="display:flex; gap:14px; padding:13px 18px; border:1px solid var(--pink-mid); border-radius:4px; align-items:center;">
+      <span style="font-size:11.5px; letter-spacing:0.13em; font-weight:700; color:var(--pink-deep); flex-shrink:0;">HOW TO<br>ENJOY</span>
+      <div style="width:1px; align-self:stretch; background:var(--pink-mid);"></div>
+      <span style="font-size:14px; line-height:1.6; color:var(--ink); flex:1;"><strong style="color:var(--pink-deep);">ドリンク:</strong> よく冷やしてそのままお楽しみください。</span>
+      <span style="font-size:14px; line-height:1.6; color:var(--ink); flex:1;"><strong style="color:var(--pink-deep);">パウダーティー:</strong> 1日1〜2本を水・牛乳・ヨーグルトに混ぜて。</span>
     </div>
   </div>
 
   <!-- Footer / Contact -->
-  <div style="flex-shrink:0; margin-top:20px; background:var(--pink-deep); padding:22px 44px; display:flex; flex-direction:column; gap:10px;">
+  <div style="flex-shrink:0; margin-top:16px; background:var(--pink-deep); padding:18px 44px; display:flex; flex-direction:column; gap:9px;">
     <div style="display:flex; align-items:center; justify-content:space-between;">
       <span class="mincho" style="color:#fff; font-size:16px; font-weight:600;">Bling Booster</span>
       <span style="color:#FBD9E7; font-size:12px;">@blingbooster_official</span>
