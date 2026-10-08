@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OKF GIM Admin</title>
+<style>
+:root{--navy:#071c33;--gold:#c7a15a;--ivory:#f7f1e7;--line:#dfe4e8}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,"Noto Sans KR","Noto Sans JP","Noto Sans SC",sans-serif;background:#eef1f4;color:#17212b}
+header{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+header b{font-size:20px}.wrap{width:min(1180px,calc(100% - 28px));margin:28px auto}.panel{background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 35px rgba(4,25,44,.08);margin-bottom:20px}
+h2{margin:0 0 16px;color:var(--navy)}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button,.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;background:var(--navy);color:#fff}
+button.secondary{background:#e9edf0;color:#193047}.gold{background:var(--gold)!important;color:#152438!important}
+.langtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.langtabs button{background:#e8edf1;color:#193047}.langtabs button.active{background:var(--navy);color:white}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+label{font-size:12px;font-weight:800;color:#5b6772}textarea,input{width:100%;padding:12px;border:1px solid #cfd7de;border-radius:12px;font:inherit}textarea{min-height:92px;resize:vertical}
+.images{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.imagebox{border:1px solid var(--line);border-radius:16px;padding:14px}.imagebox img{width:100%;height:160px;object-fit:cover;border-radius:12px;background:#eee;margin-bottom:10px}
+.note{font-size:13px;color:#6c7780;line-height:1.55}.status{font-weight:800;margin-left:8px}.ok{color:#177245}.err{color:#b33a32}
+.preview{width:100%;height:680px;border:1px solid var(--line);border-radius:16px;background:#fff}
+@media(max-width:800px){.grid,.images{grid-template-columns:1fr}.preview{height:540px}}
+</style>
+</head>
+<body>
+<header><div><b>OKF GIM ADMIN</b><div style="font-size:11px;opacity:.7">이미지 · 4개 국어 텍스트 관리</div></div><a class="btn" href="index.html">사이트 보기</a></header>
+<div class="wrap">
+  <div class="panel">
+    <h2>텍스트 편집</h2>
+    <div class="row" style="margin-bottom:14px">
+      <div class="langtabs" id="langTabs"></div>
+      <button class="gold" id="translateBtn">이 언어를 기준으로 나머지 언어 자동번역</button>
+      <span id="translateStatus" class="status"></span>
+    </div>
+    <div class="grid" id="textFields"></div>
+    <div class="row" style="margin-top:16px">
+      <button id="saveText">텍스트 저장</button>
+      <button class="secondary" id="resetText">현재 언어 초기화</button>
+    </div>
+    <p class="note">자동번역 버튼은 브라우저의 Translator API를 우선 사용하고, 지원되지 않으면 무료 MyMemory 번역 API를 사용합니다. 인터넷 연결이 필요합니다. 번역 결과는 반드시 최종 검수하세요.</p>
+  </div>
+
+  <div class="panel">
+    <h2>이미지 편집</h2>
+    <div class="images" id="imageFields"></div>
+    <div class="row" style="margin-top:16px"><button id="saveImages">이미지 저장</button><button class="secondary" id="resetImages">이미지 초기화</button></div>
+    <p class="note">업로드한 이미지는 이 브라우저의 localStorage에 저장됩니다. 너무 큰 이미지는 자동으로 축소됩니다. 현재 버전은 “같은 브라우저에서 편집·미리보기”용이며, 공개 사이트 전체에 영구 반영하려면 Supabase/Firebase 같은 백엔드 저장소 연결이 필요합니다.</p>
+  </div>
+
+  <div class="panel">
+    <h2>백업 / 복원</h2>
+    <div class="row"><button id="exportBtn">설정 JSON 다운로드</button><label class="btn" style="cursor:pointer">JSON 불러오기<input id="importInput" type="file" accept="application/json" hidden></label></div>
+  </div>
+
+  <div class="panel">
+    <h2>실시간 미리보기</h2>
+    <iframe class="preview" src="index.html" id="preview"></iframe>
+  </div>
+</div>
+
+<script>
+const CMS_KEY="okf_gim_cms_v1";
+const langs={ko:"한국어",en:"English",ja:"日本語",zh:"中文"};
+const fields=[
+ ["hero","메인 슬로건"],["subline","메인 서브카피"],["productsTitle","제품 섹션 제목"],["productsLede","제품 섹션 설명"],
+ ["giftTitle","선물세트 제품명"],["giftUse","선물세트 설명"],["whyTitle","WHY OKF 제목"],["whyLede","WHY OKF 설명"],
+ ["enjoyTitle","즐기는 법 제목"],["enjoyLede","즐기는 법 설명"],["qualityTitle","품질 섹션 제목"],["qualityLede","품질 섹션 설명"],
+ ["globalLede","GLOBAL 설명"],["storyTitle","Korean Food Story 제목"],["storyText","Korean Food Story 본문"],
+ ["b2bTitle","B2B 제목"],["b2bLede","B2B 설명"]
+];
+const defaults = {
+ko:{hero:"좋은 원초에 과한 맛을 더하지 않았습니다.",subline:"가볍고 바삭하게. 한국의 맛 그대로.",productsTitle:"한 가지 김, 세 가지 즐거움",productsLede:"체험용부터 가족용, 선물용까지. 먹는 순간과 목적에 맞춰 선택하세요.",giftTitle:"OKF 명품 광천김 선물세트",giftUse:"감사의 마음을 전하는 프리미엄 한국 김 선물",whyTitle:"좋은 김은 기본에서 다릅니다",whyLede:"원초의 품질, 담백한 맛, 바삭한 식감, 믿을 수 있는 제조환경까지.",enjoyTitle:"매일, 더 다양하게",enjoyLede:"따뜻한 밥 한 그릇부터 가벼운 간식까지.",qualityTitle:"맛만큼 중요한, 만드는 과정",qualityLede:"광고 문구보다 확인 가능한 품질 정보를 우선합니다.",globalLede:"하나의 한국 김을 시장별 식문화와 소비 상황에 맞는 메시지로 소개합니다.",storyTitle:"한국의 한 끼에서 세계의 스낵으로",storyText:"김은 따뜻한 밥과 함께 먹는 익숙한 반찬이면서, 그대로 가볍게 즐길 수 있는 바삭한 스낵이기도 합니다. OKF는 이 두 가지 매력을 하나의 글로벌 K-Food 경험으로 전합니다.",b2bTitle:"Become an OKF Gim Partner",b2bLede:"수입사, 유통사, 리테일러, 온라인 셀러의 파트너십 문의를 환영합니다."},
+en:{hero:"Great Gim Begins with Better Seaweed.",subline:"Light. Crispy. Authentically Korean.",productsTitle:"One Gim, Three Ways to Enjoy",productsLede:"From trial packs to family packs and premium gifting, choose the format that fits the moment.",giftTitle:"OKF Premium Korean Gim Gift Set",giftUse:"A refined Korean food gift for meaningful occasions.",whyTitle:"The Difference Starts with the Basics",whyLede:"Selected Korean seaweed, balanced seasoning, crisp texture and trusted production.",enjoyTitle:"More Ways to Enjoy, Every Day",enjoyLede:"From a warm bowl of rice to a light, crispy snack.",qualityTitle:"Quality You Can See Beyond the Taste",qualityLede:"We prioritize verifiable product and manufacturing information over exaggerated claims.",globalLede:"One Korean gim, expressed with market-relevant serving ideas and messaging.",storyTitle:"From the Korean Table to a Global Snack",storyText:"Gim is both a familiar companion to rice in Korea and a light, crispy snack on its own. OKF brings both sides of that experience together in a modern global K-Food format.",b2bTitle:"Become an OKF Gim Partner",b2bLede:"Partnership inquiries are welcome from importers, distributors, retailers and online sellers."},
+ja:{hero:"良い海苔は、良い原料から。",subline:"軽やかに、パリッと。韓国らしい味わい。",productsTitle:"ひとつの韓国のり、3つの楽しみ方",productsLede:"お試し、家族用、ギフトまで。シーンに合わせて選べます。",giftTitle:"OKF プレミアム韓国のり ギフトセット",giftUse:"大切な気持ちを伝える、上品な韓国食品ギフト。",whyTitle:"おいしさは、基本から",whyLede:"韓国産のり、バランスのよい味、パリッとした食感、信頼できる製造環境。",enjoyTitle:"毎日、もっと自由に",enjoyLede:"あたたかいごはんから軽いスナックまで。",qualityTitle:"味だけではない、確かな品質",qualityLede:"誇張よりも、確認できる製品・製造情報を大切にします。",globalLede:"ひとつの韓国のりを、各市場の食文化や食べ方に合う言葉で紹介します。",storyTitle:"韓国の食卓から、世界のスナックへ",storyText:"韓国のりはごはんと楽しむ定番のおかずであり、そのまま軽く食べられるパリッとしたスナックでもあります。OKFはその両方の魅力を現代的なK-Food体験として届けます。",b2bTitle:"OKF Gim パートナー募集",b2bLede:"輸入会社、卸売会社、小売店、オンライン販売会社からのお問い合わせを歓迎します。"},
+zh:{hero:"好海苔，始于好原料。",subline:"轻盈酥脆，地道韩国风味。",productsTitle:"一款海苔，三种享受",productsLede:"从尝鲜装、家庭装到礼盒装，满足不同消费场景。",giftTitle:"OKF 高端韩国海苔礼盒",giftUse:"以精致韩国风味传递心意。",whyTitle:"好海苔，从基本做起",whyLede:"韩国海苔原料、清爽调味、酥脆口感与可信赖的生产环境。",enjoyTitle:"每天都有更多吃法",enjoyLede:"从一碗热米饭到轻盈酥脆的零食。",qualityTitle:"不只好吃，更重视品质",qualityLede:"相比夸张宣传，我们更重视可验证的产品与生产信息。",globalLede:"同一款韩国海苔，以符合各市场饮食文化和使用场景的方式沟通。",storyTitle:"从韩国餐桌到全球零食",storyText:"海苔在韩国既是搭配米饭的日常食品，也可以直接作为轻盈酥脆的零食享用。OKF将这两种魅力融合为现代全球K-Food体验。",b2bTitle:"成为 OKF Gim 合作伙伴",b2bLede:"欢迎进口商、经销商、零售商及电商卖家洽谈合作。"}
+};
+let current="ko";
+function load(){try{return JSON.parse(localStorage.getItem(CMS_KEY)||"{}")}catch(e){return {}}}
+function save(x){localStorage.setItem(CMS_KEY,JSON.stringify(x));document.getElementById("preview").contentWindow.location.reload();}
+function getText(lang,key){const c=load();return c.texts?.[lang]?.[key] ?? defaults[lang][key] ?? "";}
+function renderTabs(){const box=document.getElementById("langTabs");box.innerHTML="";Object.entries(langs).forEach(([k,v])=>{const b=document.createElement("button");b.textContent=v;b.className=k===current?"active":"";b.onclick=()=>{current=k;renderTabs();renderFields()};box.appendChild(b)})}
+function renderFields(){const box=document.getElementById("textFields");box.innerHTML="";fields.forEach(([k,label])=>{const d=document.createElement("div");d.className="field "+(["storyText","productsLede","whyLede","qualityLede","globalLede","b2bLede"].includes(k)?"full":"");d.innerHTML=`<label>${label}</label><textarea data-key="${k}"></textarea>`;d.querySelector("textarea").value=getText(current,k);box.appendChild(d)})}
+document.getElementById("saveText").onclick=()=>{const c=load();c.texts=c.texts||{};c.texts[current]=c.texts[current]||{};document.querySelectorAll("[data-key]").forEach(el=>c.texts[current][el.dataset.key]=el.value.trim());save(c)};
+document.getElementById("resetText").onclick=()=>{const c=load();if(c.texts) delete c.texts[current];save(c);renderFields()};
+
+async function translateOne(text,from,to){
+  if(!text.trim()) return "";
+  // Chrome Translator API (where available)
+  try{
+    if(window.Translator && Translator.create){
+      const tr=await Translator.create({sourceLanguage:from,targetLanguage:to});
+      return await tr.translate(text);
+    }
+  }catch(e){}
+  // Free fallback
+  const langMap={ko:"ko",en:"en",ja:"ja",zh:"zh-CN"};
+  const url=`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langMap[from]}|${langMap[to]}`;
+  const r=await fetch(url);
+  if(!r.ok) throw new Error("translation failed");
+  const j=await r.json();
+  return j?.responseData?.translatedText || text;
+}
+document.getElementById("translateBtn").onclick=async()=>{
+  const s=document.getElementById("translateStatus");s.textContent="번역 중…";s.className="status";
+  try{
+    const c=load();c.texts=c.texts||{};
+    // first capture current edits even if not saved yet
+    const source={};document.querySelectorAll("[data-key]").forEach(el=>source[el.dataset.key]=el.value.trim());
+    c.texts[current]={...(c.texts[current]||{}),...source};
+    for(const target of Object.keys(langs)){
+      if(target===current) continue;
+      c.texts[target]=c.texts[target]||{};
+      for(const [key] of fields){
+        c.texts[target][key]=await translateOne(source[key]||"",current,target);
+      }
+    }
+    save(c);s.textContent="4개 언어 반영 완료";s.className="status ok";
+  }catch(e){s.textContent="자동번역 실패 — 인터넷/CORS/API 상태를 확인하세요.";s.className="status err"}
+};
+
+const imageDefs=[["logo","OKF 로고"],["package","TRY IT 이미지"],["share","SHARE IT 이미지"],["gift","GIFT IT 이미지"],["story","스토리 이미지"],["gallery1","갤러리 1"],["gallery2","갤러리 2"],["gallery3","갤러리 3"],["gallery4","갤러리 4"],["enjoy1","따뜻한 밥과"],["enjoy2","도시락에"],["enjoy3","그대로 바삭하게"],["enjoy4","샐러드 토핑"],["enjoy5","주먹밥과"],["heroPoster","동영상 포스터"]];
+function compress(file,max=1600,q=.86){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{const scale=Math.min(1,max/img.width);const c=document.createElement("canvas");c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext("2d").drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL("image/jpeg",q))};img.onerror=reject;img.src=URL.createObjectURL(file)})}
+function renderImages(){const box=document.getElementById("imageFields");const c=load();box.innerHTML="";imageDefs.forEach(([k,label])=>{const d=document.createElement("div");d.className="imagebox";const fallback={logo:"assets/okf-logo.png",package:"assets/product-pack.jpg",share:"assets/product-meal.jpg",gift:"assets/gift-box-design.jpg",story:"assets/product-meal.jpg",gallery1:"assets/hero-quality.jpg",gallery2:"assets/poster-window.jpg",gallery3:"assets/family-scene.jpg",gallery4:"assets/gift-box-design.jpg",enjoy1:"assets/enjoy-rice.jpg",enjoy2:"assets/enjoy-lunchbox.jpg",enjoy3:"assets/enjoy-snack.jpg",enjoy4:"assets/enjoy-salad.jpg",enjoy5:"assets/enjoy-riceball.jpg",heroPoster:"assets/hero-poster.jpg"}[k];d.innerHTML=`<b>${label}</b><img src="${c.images?.[k]||fallback}"><input type="file" accept="image/*" data-imgkey="${k}">`;box.appendChild(d)})}
+document.getElementById("saveImages").onclick=async()=>{const c=load();c.images=c.images||{};for(const input of document.querySelectorAll("[data-imgkey]")){if(input.files[0]) c.images[input.dataset.imgkey]=await compress(input.files[0]);}save(c);renderImages()}
+document.getElementById("resetImages").onclick=()=>{const c=load();delete c.images;save(c);renderImages()}
+
+document.getElementById("exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(load(),null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="okf-gim-cms-settings.json";a.click();URL.revokeObjectURL(a.href)}
+document.getElementById("importInput").onchange=async(e)=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());save(j);renderFields();renderImages()}catch(err){alert("올바른 JSON 파일이 아닙니다.")}}
+
+renderTabs();renderFields();renderImages();
+</script>
+</body></html>

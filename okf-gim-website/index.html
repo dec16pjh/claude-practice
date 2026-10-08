@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OKF Premium Korean Gim</title>
+  <meta name="description" content="OKF Premium Korean Gim — light, crispy, authentically Korean." />
+  <style>
+    :root{
+      --navy:#071c33; --navy2:#0d2b4b; --ivory:#f7f1e7; --gold:#c7a15a;
+      --ink:#16202b; --muted:#697480; --white:#fff; --line:rgba(7,28,51,.12);
+      --radius:28px; --shadow:0 18px 60px rgba(4,23,39,.13);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI","Noto Sans KR","Noto Sans JP","Noto Sans SC",Arial,sans-serif;color:var(--ink);background:#fff}
+    a{text-decoration:none;color:inherit}
+    img,video{max-width:100%;display:block}
+    .wrap{width:min(1180px,calc(100% - 40px));margin:auto}
+    .topbar{position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(7,28,51,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.12)}
+    .nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:12px;color:white}
+    .brand-mark{width:74px;height:auto;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,.12))}
+    .brand-copy{font-weight:850;letter-spacing:.04em;color:white;font-size:20px;line-height:1.05}
+    .brand-copy small{display:block;font-weight:600;font-size:10px;letter-spacing:.18em;color:#d7c19a;margin-top:4px}
+    .navlinks{display:flex;gap:22px;color:#eef2f5;font-size:14px;align-items:center}
+    .navlinks a{opacity:.86}.navlinks a:hover{opacity:1}
+    .langs{display:flex;gap:6px}.langs button{border:1px solid rgba(255,255,255,.3);background:transparent;color:white;padding:8px 9px;border-radius:999px;cursor:pointer;font-size:12px}
+    .langs button.active{background:#fff;color:var(--navy)}
+    .hero{height:92vh;min-height:680px;position:relative;display:flex;align-items:end;overflow:hidden;background:var(--navy)}
+    .hero video,.hero .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,14,28,.78) 0%,rgba(3,14,28,.38) 48%,rgba(3,14,28,.15) 100%),linear-gradient(0deg,rgba(3,14,28,.48),transparent 45%)}
+    .hero-content{position:relative;z-index:2;color:#fff;padding:0 0 82px;max-width:760px}
+    .hero-logo{width:118px;height:auto;margin:0 0 18px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.25))}
+    .eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:12px;font-weight:800;color:#e6cc98;margin-bottom:20px}
+    h1{font-size:clamp(52px,7vw,92px);line-height:.93;margin:0 0 22px;letter-spacing:-.05em}
+    .hero p{font-size:clamp(21px,2.2vw,32px);line-height:1.28;margin:0 0 28px;max-width:680px}
+    .subline{font-size:15px!important;letter-spacing:.08em;color:#e7edf2}
+    .cta{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 20px;border-radius:999px;font-weight:750;border:1px solid transparent}
+    .btn.primary{background:white;color:var(--navy)} .btn.ghost{border-color:rgba(255,255,255,.55);color:white}
+    .video-control{position:absolute;right:26px;bottom:26px;z-index:3;border:1px solid rgba(255,255,255,.45);background:rgba(7,28,51,.55);color:white;border-radius:999px;padding:10px 13px;cursor:pointer}
+    section{padding:110px 0}
+    .section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:44px}
+    .kicker{font-size:12px;font-weight:850;letter-spacing:.18em;color:#9a7839;text-transform:uppercase}
+    h2{font-size:clamp(38px,5vw,64px);line-height:1.02;letter-spacing:-.045em;margin:10px 0 0;color:var(--navy)}
+    .lede{max-width:520px;font-size:18px;line-height:1.65;color:var(--muted)}
+    .ivory{background:var(--ivory)} .navy{background:var(--navy);color:white}.navy h2{color:white}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:0 8px 28px rgba(6,28,49,.05)}
+    .product-card{padding:0;overflow:hidden}.product-media{height:310px;background:#ece7dd;display:grid;place-items:center;overflow:hidden}.product-media img{width:100%;height:100%;object-fit:cover}
+    .product-body{padding:28px}.tag{display:inline-block;font-size:11px;font-weight:850;letter-spacing:.15em;color:#9a7839;margin-bottom:12px}
+    .product-body h3,.card h3{font-size:26px;margin:0 0 10px;color:var(--navy)}
+    .product-body p,.card p{color:var(--muted);line-height:1.6}
+    .mini{font-size:13px;color:#87919b!important}
+    .features{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}.feature{padding:24px 20px;border-top:2px solid #d4b16c;background:#fff;border-radius:0 0 20px 20px}
+    .feature b{display:block;font-size:12px;color:#9a7839;margin-bottom:18px}.feature h3{font-size:19px}
+    .uses{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.use{aspect-ratio:1/1.04;border-radius:24px;background:linear-gradient(145deg,#f4eee5,#fff);padding:20px;display:flex;flex-direction:column;justify-content:flex-end;border:1px solid var(--line)}
+    .use .icon{font-size:44px;margin-bottom:auto}.use strong{font-size:18px;color:var(--navy)}
+    .quality-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px}
+    .quality-panel{border-radius:30px;padding:34px;background:#fff;color:var(--ink)}
+    .facts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}.fact{padding:16px;border-radius:16px;background:#f4f6f7}.fact b{display:block;color:var(--navy)}
+    details{margin-top:18px;border-top:1px solid #dfe5e9;padding-top:18px}summary{cursor:pointer;font-weight:800}
+    .map{min-height:420px;border-radius:32px;background:linear-gradient(180deg,#0d2744 0%,#081f36 100%);position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.15)}
+    .map:before{content:"";position:absolute;inset:0;opacity:.24;background:url("assets/world-map.jpg") center/cover no-repeat;mix-blend-mode:screen}
+    .map:after{content:"";position:absolute;inset:auto auto 8% 50%;width:340px;height:340px;transform:translateX(-50%);background:radial-gradient(circle,rgba(88,135,189,.18),rgba(88,135,189,0) 68%);filter:blur(4px);pointer-events:none}
+    .world-svg{display:none}
+    .pin{position:absolute;z-index:2;background:#d7b26a;color:#071c33;font-weight:850;padding:8px 11px;border-radius:999px;font-size:12px;box-shadow:0 8px 20px rgba(0,0,0,.16)}
+    .pin:before{content:"";position:absolute;left:50%;bottom:-18px;width:2px;height:18px;background:rgba(255,255,255,.42);transform:translateX(-50%)}
+    .pin:after{content:"";position:absolute;left:50%;bottom:-23px;width:10px;height:10px;border-radius:50%;background:#fff;transform:translateX(-50%);box-shadow:0 0 0 4px rgba(255,255,255,.16)}
+    .pin.us{left:17%;top:31%}.pin.jp{right:20%;top:33%}.pin.cn{right:29%;top:44%}.pin.sea{right:23%;top:60%}.pin.kr{right:23%;top:39%;background:#fff}
+    .story{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}.story-image{border-radius:32px;overflow:hidden;min-height:420px;background:#ddd}.story-image img{width:100%;height:100%;object-fit:cover}
+    .gallery-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px}.gallery-item{border-radius:28px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:0 10px 30px rgba(6,28,49,.05)}.gallery-item img{width:100%;height:100%;display:block;object-fit:cover}.gallery-item.tall{min-height:290px}.gallery-item.wide{grid-column:span 2;min-height:290px}.gallery-item.poster img{object-position:center top}
+    .b2b-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:28px}
+    form{background:#fff;border-radius:30px;padding:28px;color:var(--ink)}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}
+    label{font-size:12px;font-weight:800;color:#5f6a74}input,select,textarea{width:100%;padding:13px 14px;border:1px solid #cfd7de;border-radius:14px;font:inherit;background:#fff}
+    textarea{min-height:110px;resize:vertical}.submit{margin-top:14px;width:100%;border:0;background:var(--navy);color:#fff;padding:15px;border-radius:999px;font-weight:850;cursor:pointer}
+    .audience{display:grid;grid-template-columns:1fr 1fr;gap:12px}.audience div{padding:18px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+    footer{padding:46px 0;background:#06182b;color:#d8e0e6}.footer-row{display:flex;justify-content:space-between;gap:24px;align-items:center;flex-wrap:wrap}
+    .downloads{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}.download{padding:18px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}.download small{color:#d7b26a}
+    .menu-btn{display:none}
+    @media (max-width:900px){
+      .navlinks{display:none}.menu-btn{display:block;color:white;background:none;border:0;font-size:24px}.langs{margin-left:auto}
+      .cards{grid-template-columns:1fr}.features,.uses{grid-template-columns:1fr 1fr}.quality-grid,.story,.b2b-grid{grid-template-columns:1fr}.downloads{grid-template-columns:1fr 1fr}
+      .hero{min-height:620px;height:88vh}.hero-content{padding-bottom:62px}.world-svg{padding:26px 20px}.pin{font-size:11px;padding:7px 10px}.pin.us{left:10%;top:28%}.pin.jp{right:11%;top:31%}.pin.cn{right:24%;top:44%}.pin.sea{right:16%;top:63%}.pin.kr{right:18%;top:39%}.gallery-grid{grid-template-columns:1fr 1fr}.gallery-item.wide{grid-column:span 2}
+    }
+    @media (max-width:560px){
+      .wrap{width:min(100% - 28px,1180px)}.nav{height:68px}.brand-mark{width:60px}.brand-copy{font-size:17px}.langs button{padding:7px 8px}
+      section{padding:82px 0}.features,.uses,.form-grid,.downloads,.gallery-grid{grid-template-columns:1fr}.section-head{display:block}.lede{margin-top:18px}.map{min-height:340px}.world-svg{padding:18px 12px}.pin{font-size:10px;padding:6px 8px}.pin.us{left:7%;top:29%}.pin.jp{right:5%;top:29%}.pin.cn{right:17%;top:44%}.pin.sea{right:9%;top:64%}.pin.kr{right:11%;top:39%}.gallery-item.wide{grid-column:auto}
+      h1{font-size:48px}.hero p{font-size:22px}.video-control{right:14px;bottom:14px}.quality-panel{padding:24px}.facts{grid-template-columns:1fr}
+    }
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero video{display:none}}
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap nav">
+    <a class="brand" href="#home"><img src="assets/okf-logo.png" alt="OKF logo" class="brand-mark" data-cms-image="logo"><span class="brand-copy">OKF FOOD<small>PREMIUM KOREAN GIM</small></span></a>
+    <nav class="navlinks">
+      <a href="#products" data-t="navProducts"></a><a href="#why" data-t="navWhy"></a><a href="#enjoy" data-t="navEnjoy"></a><a href="#quality" data-t="navQuality"></a><a href="#global" data-t="navGlobal"></a><a href="#b2b">B2B</a>
+    </nav>
+    <div class="langs"><button data-lang="ko" class="active">KR</button><button data-lang="en">EN</button><button data-lang="ja">JP</button><button data-lang="zh">中文</button></div>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <img class="poster" src="assets/hero-poster.jpg" alt="OKF Korean Gim lifestyle image" data-cms-image="heroPoster" />
+  <video id="heroVideo" autoplay muted loop playsinline poster="assets/hero-poster.jpg"><source src="assets/okf-gim-promo.mp4" type="video/mp4"></video>
+  <div class="wrap hero-content">
+    <img src="assets/okf-logo.png" alt="OKF logo" class="hero-logo" data-cms-image="logo"><div class="eyebrow">OKF FOOD · MADE IN KOREA</div>
+    <h1>OKF<br>PREMIUM<br>KOREAN GIM</h1>
+    <p data-t="hero" data-cms="hero"></p>
+    <p class="subline" data-t="subline" data-cms="subline"></p>
+    <div class="cta"><a href="#products" class="btn primary" data-t="ctaProducts"></a><a href="#b2b" class="btn ghost" data-t="ctaB2B"></a></div>
+  </div>
+  <button class="video-control" id="videoControl" aria-label="Pause video">Ⅱ</button>
+</section>
+
+<section id="products" class="ivory">
+  <div class="wrap">
+    <div class="section-head"><div><div class="kicker">OUR GIM</div><h2 data-t="productsTitle" data-cms="productsTitle"></h2></div><p class="lede" data-t="productsLede" data-cms="productsLede"></p></div>
+    <div class="cards">
+      <article class="card product-card"><div class="product-media"><img src="assets/product-pack.jpg" alt="OKF Premium Korean Gim product pack" data-cms-image="package"></div><div class="product-body"><span class="tag">TRY IT</span><h3>OKF Premium Korean Gim</h3><p><strong>4g × 3 Pack</strong></p><p data-t="tryUse"></p></div></article>
+      <article class="card product-card"><div class="product-media"><img src="assets/product-meal.jpg" alt="OKF Korean Gim served with rice" data-cms-image="share"></div><div class="product-body"><span class="tag">SHARE IT</span><h3>OKF Premium Korean Gim Family Pack</h3><p><strong>4g × 12 Pack</strong></p><p data-t="shareUse"></p></div></article>
+      <article class="card product-card"><div class="product-media"><img src="assets/gift-box-design.jpg" alt="OKF premium Korean seaweed gift box" data-cms-image="gift"></div><div class="product-body"><span class="tag">GIFT IT</span><h3 data-t="giftTitle" data-cms="giftTitle"></h3><p><strong>12g × 12 Pack</strong></p><p data-t="giftUse" data-cms="giftUse"></p><p class="mini" data-t="artNote"></p></div></article>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap"><div class="section-head"><div><div class="kicker">WHY OKF</div><h2 data-t="whyTitle" data-cms="whyTitle"></h2></div><p class="lede" data-t="whyLede" data-cms="whyLede"></p></div>
+    <div class="features">
+      <div class="feature"><b>01</b><h3 data-t="f1t"></h3><p data-t="f1p"></p></div>
+      <div class="feature"><b>02</b><h3>Light & Crispy</h3><p data-t="f2p"></p></div>
+      <div class="feature"><b>03</b><h3 data-t="f3t"></h3><p data-t="f3p"></p></div>
+      <div class="feature"><b>04</b><h3 data-t="f4t"></h3><p data-t="f4p"></p></div>
+      <div class="feature"><b>05</b><h3>Global OKF</h3><p data-t="f5p"></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="enjoy" class="ivory">
+  <div class="wrap"><div class="section-head"><div><div class="kicker">HOW TO ENJOY</div><h2 data-t="enjoyTitle" data-cms="enjoyTitle"></h2></div><p class="lede" data-t="enjoyLede" data-cms="enjoyLede"></p></div>
+    <div class="uses">
+      <div class="use"><img src="assets/enjoy-rice.jpg" alt="OKF Korean Gim with warm rice" data-cms-image="enjoy1"><div class="label" data-t="u1"></div></div>
+      <div class="use"><img src="assets/enjoy-lunchbox.jpg" alt="OKF Korean Gim in a Korean lunchbox" data-cms-image="enjoy2"><div class="label" data-t="u2"></div></div>
+      <div class="use"><img src="assets/enjoy-snack.jpg" alt="Crispy roasted seaweed snack" data-cms-image="enjoy3"><div class="label" data-t="u3"></div></div>
+      <div class="use"><img src="assets/enjoy-salad.jpg" alt="Seaweed salad topping" data-cms-image="enjoy4"><div class="label" data-t="u4"></div></div>
+      <div class="use"><img src="assets/enjoy-riceball.jpg" alt="Seaweed rice ball" data-cms-image="enjoy5"><div class="label" data-t="u5"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="quality" class="navy">
+  <div class="wrap"><div class="section-head"><div><div class="kicker">QUALITY</div><h2 data-t="qualityTitle" data-cms="qualityTitle"></h2></div><p class="lede" style="color:#c6d1d9" data-t="qualityLede" data-cms="qualityLede"></p></div>
+    <div class="quality-grid">
+      <div class="quality-panel"><h3 data-t="qualityFacts"></h3><div class="facts">
+        <div class="fact"><b>Made in Korea</b><span data-t="q1"></span></div>
+        <div class="fact"><b>Korean Seaweed</b><span data-t="q2"></span></div>
+        <div class="fact"><b>HACCP Manufacturing</b><span data-t="q3"></span></div>
+        <div class="fact"><b>Quality Controlled</b><span data-t="q4"></span></div>
+      </div></div>
+      <div class="quality-panel"><h3 data-t="nutrition"></h3><p class="mini" data-t="nutritionNote"></p><details><summary data-t="openNutrition"></summary><p class="mini">Per 100g · Energy 560.1 kcal · Fat 38.1g · Saturated Fat 3.4g · Sodium 1,519.6mg · Carbohydrate 30.8g · Dietary Fiber 30.2g · Sugars 0.1g · Protein 23.5g · Calcium 108mg · Potassium 1,094mg · Iron 6.2mg</p><p class="mini" data-t="ndNote"></p></details></div>
+    </div>
+  </div>
+</section>
+
+<section id="global" class="navy" style="padding-top:0">
+  <div class="wrap"><div class="section-head"><div><div class="kicker">GLOBAL</div><h2>From Korea to the World</h2></div><p class="lede" style="color:#c6d1d9" data-t="globalLede" data-cms="globalLede"></p></div>
+    <div class="map" role="img" aria-label="World map showing key OKF Gim market messages">
+      <span class="pin us">USA · Healthy Korean Seaweed Snack</span><span class="pin jp">JAPAN · ごはん / お弁当</span><span class="pin cn">CHINA · 家庭佐餐海苔</span><span class="pin sea">SEA · Crispy Korean Gim</span><span class="pin kr">KOREA</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap story"><div><div class="kicker">KOREAN FOOD STORY</div><h2 data-t="storyTitle" data-cms="storyTitle"></h2><p class="lede" data-t="storyText" data-cms="storyText"></p></div><div class="story-image"><img src="assets/product-meal.jpg" alt="OKF Korean Gim served with rice" data-cms-image="story"></div></div>
+</section>
+
+<section id="gallery" class="ivory">
+  <div class="wrap">
+    <div class="section-head"><div><div class="kicker">VISUAL STORY</div><h2 data-t="galleryTitle"></h2></div><p class="lede" data-t="galleryLede"></p></div>
+    <div class="gallery-grid">
+      <div class="gallery-item wide poster"><img src="assets/hero-quality.jpg" alt="OKF Korean Gim key visual" data-cms-image="gallery1"></div>
+      <div class="gallery-item tall"><img src="assets/poster-window.jpg" alt="Holding OKF Korean Gim gift set at the table" data-cms-image="gallery2"></div>
+      <div class="gallery-item tall"><img src="assets/family-scene.jpg" alt="Family enjoying OKF Korean Gim" data-cms-image="gallery3"></div>
+      <div class="gallery-item wide"><img src="assets/gift-box-design.jpg" alt="OKF Korean Gim gift box design" data-cms-image="gallery4"></div>
+    </div>
+  </div>
+</section>
+
+<section id="b2b" class="navy">
+  <div class="wrap b2b-grid">
+    <div><div class="kicker">B2B PARTNERSHIP</div><h2 data-t="b2bTitle" data-cms="b2bTitle"></h2><p class="lede" style="color:#c6d1d9" data-t="b2bLede" data-cms="b2bLede"></p><div class="audience"><div>Importer</div><div>Distributor</div><div>Retailer</div><div>Online Seller</div></div>
+      <div class="downloads"><div class="download">Product Catalog<br><small>Coming soon</small></div><div class="download">Specification Sheet<br><small>Coming soon</small></div><div class="download">Nutrition Facts<br><small>Coming soon</small></div><div class="download">Certificate<br><small>Coming soon</small></div></div>
+    </div>
+    <form id="inquiryForm">
+      <div class="form-grid">
+        <div class="field"><label data-t="company"></label><input required name="company"></div>
+        <div class="field"><label data-t="country"></label><input required name="country"></div>
+        <div class="field"><label data-t="name"></label><input required name="name"></div>
+        <div class="field"><label>Email</label><input required type="email" name="email"></div>
+        <div class="field"><label>WhatsApp</label><input name="whatsapp"></div>
+        <div class="field"><label data-t="business"></label><select name="business"><option>Importer</option><option>Distributor</option><option>Retailer</option><option>Online Seller</option></select></div>
+        <div class="field"><label data-t="market"></label><input name="market"></div>
+        <div class="field"><label data-t="qty"></label><input name="qty"></div>
+        <div class="field full"><label data-t="message"></label><textarea name="message"></textarea></div>
+      </div>
+      <button class="submit" type="submit">CONTACT SALES</button><p id="formStatus" class="mini"></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap footer-row"><div style="display:flex;align-items:center;gap:14px"><img src="assets/okf-logo.png" alt="OKF logo" style="width:72px;height:auto" data-cms-image="logo"><div><strong>OKF FOOD</strong><br><small>OKF PREMIUM KOREAN GIM · MADE IN KOREA</small></div></div><div>KR · EN · JP · 中文 · B2B INQUIRY</div></div></footer>
+
+<script src="site-config.js"></script>
+<script>
+const T={
+ko:{navProducts:"제품",navWhy:"WHY OKF",navEnjoy:"즐기는 법",navQuality:"품질",navGlobal:"글로벌",hero:"좋은 원초에 과한 맛을 더하지 않았습니다.",subline:"가볍고 바삭하게. 한국의 맛 그대로.",ctaProducts:"제품 보기",ctaB2B:"B2B 문의",productsTitle:"한 가지 김, 세 가지 즐거움",productsLede:"체험용부터 가족용, 선물용까지. 먹는 순간과 목적에 맞춰 선택하세요.",tryUse:"도시락 · 간식 · 첫 구매 · 휴대용",shareUse:"가족 식사 · 매일 먹는 김 · 온라인 구매 · 재구매",giftTitle:"OKF 명품 광천김 선물세트",giftUse:"감사의 마음을 전하는 프리미엄 한국 김 선물",artNote:"패키지 이미지는 제공된 디자인 원본을 그대로 사용합니다.",whyTitle:"좋은 김은 기본에서 다릅니다",whyLede:"원초의 품질, 담백한 맛, 바삭한 식감, 믿을 수 있는 제조환경까지.",f1t:"엄선한 한국산 원초",f1p:"좋은 김은 원초부터 다릅니다.",f2p:"과한 짠맛보다 김 본연의 고소함과 바삭함에 집중했습니다.",f3t:"밥반찬에서 간식까지",f3p:"식사와 도시락, 간식으로 폭넓게 즐기세요.",f4t:"믿을 수 있는 제조환경",f4p:"HACCP 제조시설에서 위생과 품질을 관리합니다.",f5p:"한국의 맛을 세계 소비자에게 소개합니다.",enjoyTitle:"매일, 더 다양하게",enjoyLede:"따뜻한 밥 한 그릇부터 가벼운 간식까지.",u1:"따뜻한 밥과",u2:"도시락에",u3:"그대로 바삭하게",u4:"샐러드 토핑",u5:"주먹밥과",qualityTitle:"맛만큼 중요한, 만드는 과정",qualityLede:"광고 문구보다 확인 가능한 품질 정보를 우선합니다.",qualityFacts:"제품과 제조",q1:"한국에서 제조",q2:"한국산 김",q3:"HACCP 제조시설",q4:"체계적인 품질관리",nutrition:"영양·제품 정보",nutritionNote:"아래 수치는 제공된 시험성적서 기준 참고값입니다.",openNutrition:"100g 기준 영양정보 보기",ndNote:"트랜스지방·콜레스테롤·비타민D는 숫자 0이 아닌 ‘불검출’로 기록되었습니다. 실제 판매 전 국가별 라벨과 반드시 일치시켜야 합니다.",globalLede:"하나의 한국 김을 시장별 식문화와 소비 상황에 맞는 메시지로 소개합니다.",galleryTitle:"맛과 순간을 담은 브랜드 이미지",galleryLede:"제품 단독컷부터 식탁 위 활용 장면까지, OKF 광천김의 분위기를 한눈에 보여줍니다.",storyTitle:"한국의 한 끼에서 세계의 스낵으로",storyText:"김은 따뜻한 밥과 함께 먹는 익숙한 반찬이면서, 그대로 가볍게 즐길 수 있는 바삭한 스낵이기도 합니다. OKF는 이 두 가지 매력을 하나의 글로벌 K-Food 경험으로 전합니다.",b2bTitle:"Become an OKF Gim Partner",b2bLede:"수입사, 유통사, 리테일러, 온라인 셀러의 파트너십 문의를 환영합니다.",company:"회사명",country:"국가",name:"담당자",business:"사업유형",market:"목표시장",qty:"예상수량",message:"문의내용",formSuccess:"현재 데모 사이트라 문의 내용은 전송·저장되지 않습니다."},
+en:{navProducts:"Products",navWhy:"Why OKF",navEnjoy:"How to Enjoy",navQuality:"Quality",navGlobal:"Global",hero:"Great Gim Begins with Better Seaweed.",subline:"Light. Crispy. Authentically Korean.",ctaProducts:"View Products",ctaB2B:"B2B Inquiry",productsTitle:"One Gim, Three Ways to Enjoy",productsLede:"From trial packs to family packs and premium gifting, choose the format that fits the moment.",tryUse:"Lunchbox · Snack · First Try · Convenience",shareUse:"Family meals · Daily use · Online · Repeat purchase",giftTitle:"OKF Premium Korean Gim Gift Set",giftUse:"A refined Korean food gift for meaningful occasions.",artNote:"Supplied package artwork is used without re-typesetting label content.",whyTitle:"The Difference Starts with the Basics",whyLede:"Selected Korean seaweed, balanced seasoning, crisp texture and trusted production.",f1t:"Selected Korean Seaweed",f1p:"Good gim starts with good seaweed.",f2p:"Focused on savory flavor and crisp texture rather than excessive saltiness.",f3t:"For Meals & Snacks",f3p:"Enjoy it with meals, lunchboxes or straight from the pack.",f4t:"Trusted Production",f4p:"Produced in a HACCP manufacturing facility with controlled quality processes.",f5p:"Sharing Korean flavor with consumers around the world.",enjoyTitle:"More Ways to Enjoy, Every Day",enjoyLede:"From a warm bowl of rice to a light, crispy snack.",u1:"With Rice",u2:"Lunchbox",u3:"Snack",u4:"Salad Topping",u5:"Rice Ball",qualityTitle:"Quality You Can See Beyond the Taste",qualityLede:"We prioritize verifiable product and manufacturing information over exaggerated claims.",qualityFacts:"Product & Production",q1:"Made in Korea",q2:"Korean seaweed",q3:"HACCP manufacturing facility",q4:"Quality-controlled production",nutrition:"Nutrition & Product Info",nutritionNote:"Reference values below are based on the supplied test report.",openNutrition:"View nutrition per 100g",ndNote:"Trans fat, cholesterol and vitamin D were recorded as non-detected, not numeric zero. Market labels must be verified before publication.",globalLede:"One Korean gim, expressed with market-relevant serving ideas and messaging.",galleryTitle:"Brand Visuals",galleryLede:"From clean pack shots to at-table lifestyle scenes, explore the mood of OKF Gwangcheon Seaweed.",storyTitle:"From the Korean Table to a Global Snack",storyText:"Gim is both a familiar companion to rice in Korea and a light, crispy snack on its own. OKF brings both sides of that experience together in a modern global K-Food format.",b2bTitle:"Become an OKF Gim Partner",b2bLede:"Partnership inquiries are welcome from importers, distributors, retailers and online sellers.",company:"Company",country:"Country",name:"Name",business:"Business Type",market:"Target Market",qty:"Expected Quantity",message:"Message",formSuccess:"This is a demo site. Your inquiry has not been sent or stored."},
+ja:{navProducts:"商品",navWhy:"OKFのこだわり",navEnjoy:"楽しみ方",navQuality:"品質",navGlobal:"グローバル",hero:"良い海苔は、良い原料から。",subline:"軽やかに、パリッと。韓国らしい味わい。",ctaProducts:"商品を見る",ctaB2B:"B2Bお問い合わせ",productsTitle:"ひとつの韓国のり、3つの楽しみ方",productsLede:"お試し、家族用、ギフトまで。シーンに合わせて選べます。",tryUse:"お弁当 · おやつ · お試し · 携帯用",shareUse:"家族の食卓 · 毎日の一品 · オンライン · リピート",giftTitle:"OKF プレミアム韓国のり ギフトセット",giftUse:"大切な気持ちを伝える、上品な韓国食品ギフト。",artNote:"提供されたパッケージデザインをそのまま使用しています。",whyTitle:"おいしさは、基本から",whyLede:"韓国産のり、バランスのよい味、パリッとした食感、信頼できる製造環境。",f1t:"厳選した韓国産のり",f1p:"良い海苔は、良い原料から始まります。",f2p:"強い塩味より、香ばしさと軽い食感を大切にしました。",f3t:"ごはんにも、おやつにも",f3p:"食事、お弁当、そのままのスナックにも。",f4t:"信頼できる製造環境",f4p:"HACCP製造施設で衛生と品質を管理しています。",f5p:"韓国の味を世界の食卓へ。",enjoyTitle:"毎日、もっと自由に",enjoyLede:"あたたかいごはんから軽いスナックまで。",u1:"ごはんと",u2:"お弁当に",u3:"そのまま",u4:"サラダに",u5:"おにぎりに",qualityTitle:"味だけではない、確かな品質",qualityLede:"誇張よりも、確認できる製品・製造情報を大切にします。",qualityFacts:"商品・製造",q1:"韓国製造",q2:"韓国産のり",q3:"HACCP製造施設",q4:"品質管理",nutrition:"栄養・商品情報",nutritionNote:"以下は提供された試験成績書に基づく参考値です。",openNutrition:"100g当たりの栄養情報",ndNote:"トランス脂肪、コレステロール、ビタミンDは数値0ではなく「不検出」と記録されています。販売前に各国表示との整合確認が必要です。",globalLede:"ひとつの韓国のりを、各市場の食文化や食べ方に合う言葉で紹介します。",galleryTitle:"ブランドビジュアル",galleryLede:"商品単体カットから食卓シーンまで、OKF 광천김の雰囲気をビジュアルで紹介します。",storyTitle:"韓国の食卓から、世界のスナックへ",storyText:"韓国のりはごはんと楽しむ定番のおかずであり、そのまま軽く食べられるパリッとしたスナックでもあります。OKFはその両方の魅力を現代的なK-Food体験として届けます。",b2bTitle:"OKF Gim パートナー募集",b2bLede:"輸入会社、卸売会社、小売店、オンライン販売会社からのお問い合わせを歓迎します。",company:"会社名",country:"国",name:"ご担当者名",business:"業態",market:"対象市場",qty:"予定数量",message:"お問い合わせ内容",formSuccess:"現在はデモサイトのため、内容は送信・保存されません。"},
+zh:{navProducts:"产品",navWhy:"为什么选择OKF",navEnjoy:"食用方式",navQuality:"品质",navGlobal:"全球",hero:"好海苔，始于好原料。",subline:"轻盈酥脆，地道韩国风味。",ctaProducts:"查看产品",ctaB2B:"B2B咨询",productsTitle:"一款海苔，三种享受",productsLede:"从尝鲜装、家庭装到礼盒装，满足不同消费场景。",tryUse:"便当 · 零食 · 尝鲜 · 便携",shareUse:"家庭佐餐 · 日常食用 · 网购 · 复购",giftTitle:"OKF 高端韩国海苔礼盒",giftUse:"以精致韩国风味传递心意。",artNote:"包装图片沿用所提供的原始设计，不重新排印标签内容。",whyTitle:"好海苔，从基本做起",whyLede:"韩国海苔原料、清爽调味、酥脆口感与可信赖的生产环境。",f1t:"严选韩国海苔原料",f1p:"好海苔，始于好原料。",f2p:"不过度强调咸味，更突出海苔本身的香味与酥脆口感。",f3t:"佐餐与零食皆宜",f3p:"可搭配米饭、便当，也可直接作为零食享用。",f4t:"可信赖的生产环境",f4p:"在HACCP生产设施中进行卫生与品质管理。",f5p:"把韩国风味带向世界。",enjoyTitle:"每天都有更多吃法",enjoyLede:"从一碗热米饭到轻盈酥脆的零食。",u1:"搭配米饭",u2:"便当",u3:"直接食用",u4:"沙拉配料",u5:"饭团",qualityTitle:"不只好吃，更重视品质",qualityLede:"相比夸张宣传，我们更重视可验证的产品与生产信息。",qualityFacts:"产品与生产",q1:"韩国制造",q2:"韩国海苔",q3:"HACCP生产设施",q4:"品质管理生产",nutrition:"营养与产品信息",nutritionNote:"以下为基于所提供检测报告的参考值。",openNutrition:"查看每100g营养信息",ndNote:"反式脂肪、胆固醇和维生素D记录为“未检出”，并非数值0。正式销售前应与各市场标签保持一致。",globalLede:"同一款韩国海苔，以符合各市场饮食文化和使用场景的方式沟通。",galleryTitle:"品牌视觉",galleryLede:"从产品单图到餐桌生活方式场景，直观呈现OKF韩国海苔的品牌氛围。",storyTitle:"从韩国餐桌到全球零食",storyText:"海苔在韩国既是搭配米饭的日常食品，也可以直接作为轻盈酥脆的零食享用。OKF将这两种魅力融合为现代全球K-Food体验。",b2bTitle:"成为 OKF Gim 合作伙伴",b2bLede:"欢迎进口商、经销商、零售商及电商卖家洽谈合作。",company:"公司",country:"国家",name:"联系人",business:"业务类型",market:"目标市场",qty:"预计数量",message:"咨询内容",formSuccess:"当前为演示网站，咨询内容不会被发送或保存。"}
+};
+let lang="ko";
+function applyLang(l){
+  lang=l; document.documentElement.lang=l==="ja"?"ja":l==="zh"?"zh-CN":l;
+  document.querySelectorAll("[data-t]").forEach(el=>{const k=el.dataset.t;if(T[l][k]) el.textContent=T[l][k]});
+  document.querySelectorAll(".langs button").forEach(b=>b.classList.toggle("active",b.dataset.lang===l));
+  document.title = "OKF Premium Korean Gim";
+}
+document.querySelectorAll(".langs button").forEach(b=>b.addEventListener("click",()=>applyLang(b.dataset.lang)));
+const v=document.getElementById("heroVideo"), c=document.getElementById("videoControl");
+c.addEventListener("click",()=>{if(v.paused){v.play();c.textContent="Ⅱ";c.setAttribute("aria-label","Pause video")}else{v.pause();c.textContent="▶";c.setAttribute("aria-label","Play video")}});
+document.getElementById("inquiryForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const status=document.getElementById("formStatus");
+  const cfg=window.OKF_SITE_CONFIG||{};
+  if(!cfg.b2bEmail){ status.textContent=T[lang].formSuccess; return; }
+  const fd=new FormData(e.currentTarget);
+  const subject=`OKF GIM B2B Inquiry - ${fd.get("company")||""} / ${fd.get("country")||""}`;
+  const body=[`Company: ${fd.get("company")||""}`,`Country: ${fd.get("country")||""}`,`Name: ${fd.get("name")||""}`,`Email: ${fd.get("email")||""}`,`WhatsApp: ${fd.get("whatsapp")||""}`,`Business Type: ${fd.get("business")||""}`,`Target Market: ${fd.get("market")||""}`,`Expected Quantity: ${fd.get("qty")||""}`,"",`${fd.get("message")||""}`].join("\n");
+  location.href=`mailto:${encodeURIComponent(cfg.b2bEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+});
+applyLang("ko");
+</script>
+<a href="admin.html" style="position:fixed;left:14px;bottom:14px;z-index:50;background:#fff;color:#071c33;padding:8px 12px;border-radius:999px;font:700 12px system-ui;box-shadow:0 6px 20px rgba(0,0,0,.18)">ADMIN</a>
+
+<script>
+const CMS_KEY="okf_gim_cms_v1";
+function loadCms(){
+  try{return JSON.parse(localStorage.getItem(CMS_KEY)||"{}")}catch(e){return {}}
+}
+function applyCms(){
+  const cms=loadCms();
+  const langData=(cms.texts||{})[lang]||{};
+  document.querySelectorAll("[data-cms]").forEach(el=>{
+    const k=el.dataset.cms;
+    if(langData[k]) el.textContent=langData[k];
+  });
+  const imgs=cms.images||{};
+  document.querySelectorAll("[data-cms-image]").forEach(el=>{
+    const k=el.dataset.cmsImage;
+    if(imgs[k]) el.src=imgs[k];
+  });
+  if(imgs.heroPoster){
+    const p=document.querySelector(".hero .poster");
+    if(p) p.src=imgs.heroPoster;
+    const v=document.getElementById("heroVideo");
+    if(v) v.poster=imgs.heroPoster;
+  }
+}
+const _applyLang=applyLang;
+applyLang=function(l){_applyLang(l);applyCms();}
+window.addEventListener("storage",e=>{if(e.key===CMS_KEY) applyCms();});
+setTimeout(applyCms,0);
+</script>
+
+</body></html>
